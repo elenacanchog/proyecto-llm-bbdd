@@ -2,6 +2,7 @@
 venv/
 .venv/
 env/
+venv_proyectopbd/
 
 # Archivos de secretos y credenciales
 .env

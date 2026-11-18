@@ -1,0 +1,10 @@
+langchain
+langchain-community
+langchain-openai
+langchain-groq
+langchain-google-genai
+pymongo
+sqlalchemy
+pandas
+python-dotenv
+streamlit
