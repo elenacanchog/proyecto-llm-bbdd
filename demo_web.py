@@ -13,7 +13,7 @@ from langchain_core.prompts import ChatPromptTemplate
 st.set_page_config(
     page_title="Demo BBDD con LLMs",
     page_icon="🗄️",
-    layout="wide"
+    layout="centered"
 )
 
 # 2. Cargamos las credenciales de tu archivo .env
@@ -43,43 +43,58 @@ Campos principales de cada documento:
   - review_scores.review_scores_rating (int): Puntuación global de 0 a 100.
 """
 
-# 3. Cabecera principal de la web
-st.title("🗄️ Consulta de Bases de Datos mediante LLMs")
-st.caption("Proyecto de Programación y Bases de Datos — Acceso en lenguaje natural (Text-to-NoSQL / Text-to-SQL)")
+# 3. Cabecera limpia y centrada
+st.title("🗄️ Consulta de Bases de Datos con LLMs")
+st.markdown("Haz preguntas en lenguaje natural y deja que la IA consulte la base de datos por ti.")
+st.divider()
 
-# 4. Menú lateral izquierdo (Sidebar)
-with st.sidebar:
-    st.header("⚙️ Configuración")
-    
-    entorno = st.radio(
-        "1. Entorno del Modelo:",
-        ["API en la Nube (Groq)", "Local (Ollama)"]
-    )
-    
-    base_datos = st.selectbox(
-        "2. Base de Datos:",
-        ["No Relacional (MongoDB Atlas)", "Relacional (SQL - Meteoritos)"]
-    )
-    
-    # Cambiamos la lista de modelos automáticamente según si elegimos API o Local
-    if entorno == "API en la Nube (Groq)":
-        modelo = st.selectbox(
-            "3. Modelo en la Nube:",
-            ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b"]
-        )
-    else:
-        modelo = st.selectbox(
-            "3. Modelo Local (Ollama):",
-            ["llama3", "mistral"]
-        )
+# 4. Selección guiada paso a paso mediante botones (sin barra lateral)
+st.markdown("**1. ¿Cómo quieres ejecutar el modelo?**")
+entorno = st.pills(
+    "Entorno de ejecución",
+    ["API en la Nube (Groq)", "Local (Ollama)"],
+    default="API en la Nube (Groq)",
+    label_visibility="collapsed"
+)
+# Si el usuario desmarca el botón por error, mantenemos uno por defecto
+if not entorno:
+    entorno = "API en la Nube (Groq)"
 
-# 5. Zona central: Caja de texto para escribir la pregunta y botón de ejecución
-pregunta = st.text_input(
-    "Escribe tu pregunta en español:",
-    placeholder="Ej: Dime 3 apartamentos en Barcelona con Wifi y aire acondicionado, ordenados del más barato al más caro."
+st.markdown("**2. ¿Qué base de datos quieres consultar?**")
+base_datos = st.pills(
+    "Base de datos",
+    ["No Relacional (MongoDB Atlas)", "Relacional (SQL - Meteoritos)"],
+    default="No Relacional (MongoDB Atlas)",
+    label_visibility="collapsed"
+)
+if not base_datos:
+    base_datos = "No Relacional (MongoDB Atlas)"
+
+st.markdown("**3. ¿Qué modelo quieres usar?**")
+if entorno == "API en la Nube (Groq)":
+    opciones_modelos = ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b"]
+else:
+    opciones_modelos = ["llama3", "mistral"]
+
+modelo = st.pills(
+    "Modelo LLM",
+    opciones_modelos,
+    default=opciones_modelos[0],
+    label_visibility="collapsed"
+)
+if not modelo:
+    modelo = opciones_modelos[0]
+
+st.divider()
+
+# 5. Caja para escribir la consulta y botón ancho de ejecución
+pregunta = st.text_area(
+    "**4. Escribe tu consulta en español:**",
+    placeholder="Ej: Dime 3 apartamentos en Barcelona que tengan Wifi y aire acondicionado, ordenados del más barato al más caro.",
+    height=100
 )
 
-boton_consultar = st.button("🚀 Ejecutar Consulta", type="primary")
+boton_consultar = st.button("🚀 Ejecutar Consulta", type="primary", use_container_width=True)
 
 # 6. Lógica que se activa SOLO cuando pulsas el botón
 if boton_consultar:
