@@ -1,5 +1,6 @@
 import threading
 import time
+from typing import Any
 from pymongo import MongoClient
 from bson import json_util
 from langchain_core.tools import tool
@@ -8,42 +9,53 @@ from langchain.agents import create_agent
 
 # 1. CONFIGURACIÓN INICIAL
 URI_MONGO = "mongodb://localhost:27017/"
-NOMBRE_BD = "sampl_airbnb" 
+NOMBRE_BD = "sampl_airbnb"
 MODELOS_A_PROBAR = ["qwen3.5:4b", "gemma-4:latest"]
 
 cliente = MongoClient(URI_MONGO)
 mongo_db = cliente[NOMBRE_BD]
 
+CAMPOS_PESADOS = {
+    "_id": 0,
+    "reviews": 0,
+    "description": 0,
+    "neighborhood_overview": 0,
+    "notes": 0,
+    "transit": 0,
+    "access": 0,
+    "interaction": 0,
+    "house_rules": 0,
+    "images": 0,
+    "host": 0,
+}
+
 SYSTEM_PROMPT = """
-Eres un agente experto en bases de datos NoSQL con MongoDB.
-Dada una petición del usuario, construye la consulta o pipeline en formato JSON estricto,
-ejecútala y responde usando los resultados obtenidos.
+Eres un agente experto en MongoDB. 
+Responde en español usando exclusivamente los datos de la base de datos.
 
 Reglas obligatorias:
-1. Revisa SIEMPRE primero qué colecciones y campos existen con obtener_esquema_mongo antes de consultar.
-2. Usa comillas dobles en todas las claves y operadores JSON (ej. "$gt", "$match", "$group", "$sort", "$limit").
-3. Para búsquedas simples usa operacion='find'. Para ordenar, agrupar, calcular promedios o sacar un Top N, usa operacion='aggregate' pasando una lista JSON de etapas.
-4. Puedes ejecutar find, aggregate, count, insert_one, update_many y delete_many cuando el usuario lo solicite.
+1. Llama SIEMPRE primero a obtener_esquema_mongo para ver los nombres reales de todos los campos (ej. "address.market", "property_type", "amenities", "price").
+2. Traduce los valores de búsqueda a como aparecen en la BD (ej. "Apartment", "Wifi", "Air conditioning").
+3. Para filtrar, ordenar y limitar resultados (Top N), usa operacion='aggregate' con una LISTA JSON de etapas: [{"$match": ...}, {"$sort": ...}, {"$limit": 3}].
+4. Si una consulta devuelve "No se encontraron documentos", revisa los nombres de los campos en el esquema antes de reintentar.
 5. Incluye SIEMPRE en tu respuesta final la consulta o pipeline JSON exacto que ejecutaste.
 """
 
 
-# 2. UTILIDADES DE TIEMPO Y CARGA EN CONSOLA
+# 2. UTILIDADES DE TIEMPO, SPINNER Y ESQUEMA COMPACTO
 def formatear_tiempo(segundos: float) -> str:
     total_segundos = int(round(segundos))
     minutos = total_segundos // 60
     segs = total_segundos % 60
-
     if minutos == 0:
         return str(round(segundos, 2)) + " segundos"
-
     texto_min = "1 minuto" if minutos == 1 else str(minutos) + " minutos"
     texto_seg = "1 segundo" if segs == 1 else str(segs) + " segundos"
     return texto_min + " " + texto_seg
 
 
 class Spinner:
-    def __init__(self, texto: str = "Ejecutando"):
+    def __init__(self, texto: str = "Pensando"):
         self.texto = texto
         self._detener = threading.Event()
         self._hilo = None
@@ -68,20 +80,39 @@ class Spinner:
         print("\r" + " " * (len(self.texto) + 5) + "\r", end="", flush=True)
 
 
-# 3. HERRAMIENTAS MONGODB (LECTURA Y ESCRITURA)
+def resumir_valor(valor, nivel=0):
+    """Muestra TODAS las claves principales sin recortarlas, pero acorta textos y listas largas."""
+    if isinstance(valor, dict):
+        if nivel >= 2:
+            return "{...}"
+        return {k: resumir_valor(v, nivel + 1) for k, v in valor.items()}
+    if isinstance(valor, list):
+        if not valor:
+            return []
+        muestra = [resumir_valor(x, nivel + 1) for x in valor[:6]]
+        if len(valor) > 6:
+            muestra.append("... (+" + str(len(valor) - 6) + " elementos)")
+        return muestra
+    if isinstance(valor, str) and len(valor) > 40:
+        return valor[:40] + "..."
+    return valor
+
+
+# 3. HERRAMIENTAS MONGODB
 @tool
 def obtener_esquema_mongo() -> str:
-    """Devuelve las colecciones disponibles en MongoDB y 2 documentos de ejemplo de cada una para conocer su estructura."""
+    """Devuelve las colecciones disponibles y todos sus campos con valores de ejemplo."""
     colecciones = mongo_db.list_collection_names()
     if not colecciones:
         return "No hay colecciones en esta base de datos."
 
     resultado = []
     for nombre_col in colecciones:
-        muestras = list(mongo_db[nombre_col].find({}, {"_id": 0}).limit(2))
+        doc = mongo_db[nombre_col].find_one({}, CAMPOS_PESADOS)
+        resumen = resumir_valor(doc) if doc else {}
         resultado.append(
-            "Colección '" + nombre_col + "' | Documentos de ejemplo:\n"
-            + json_util.dumps(muestras, indent=2, ensure_ascii=False)
+            "Colección '" + nombre_col + "' | Campos y ejemplo:\n"
+            + json_util.dumps(resumen, indent=2, ensure_ascii=False)
         )
     return "\n\n".join(resultado)
 
@@ -90,29 +121,34 @@ def obtener_esquema_mongo() -> str:
 def ejecutar_mongo(
     coleccion: str,
     operacion: str,
-    consulta_json: str = "{}",
-    datos_json: str = "{}"
+    consulta_json: Any = "{}",
+    datos_json: Any = "{}"
 ) -> str:
     """
     Ejecuta una operación en MongoDB sobre una colección.
-    - coleccion: nombre de la colección objetivo.
+    - coleccion: nombre de la colección.
     - operacion: 'find', 'aggregate', 'count', 'insert_one', 'update_many' o 'delete_many'.
-    - consulta_json: filtro JSON (ej. '{"campo": {"$gt": 100}}') o lista JSON de etapas si operacion='aggregate'.
-    - datos_json: documento JSON a insertar (en insert_one) o actualización JSON (ej. '{"$set": {"campo": "valor"}}' en update_many).
+    - consulta_json: filtro JSON (en find/count/update/delete) o lista JSON de etapas (en aggregate).
+    - datos_json: documento a insertar o cambios ($set) para update_many.
     """
     try:
         col = mongo_db[coleccion]
-
-        # Acepta tanto texto JSON como diccionarios/listas si el modelo los pasa ya parseados
         consulta = json_util.loads(consulta_json) if isinstance(consulta_json, str) else consulta_json
         datos = json_util.loads(datos_json) if isinstance(datos_json, str) else datos_json
 
         if operacion == "find":
-            filas = list(col.find(consulta, {"_id": 0}).limit(5))
+            filas = list(col.find(consulta, CAMPOS_PESADOS).limit(5))
             return json_util.dumps(filas, ensure_ascii=False) if filas else "No se encontraron documentos."
 
         elif operacion == "aggregate":
-            filas = list(col.aggregate(consulta))
+            # Si el LLM pasa un diccionario único en lugar de una lista de etapas, lo corregimos
+            if isinstance(consulta, dict):
+                consulta = [{k: v} for k, v in consulta.items()]
+
+            tiene_project = any("$project" in etapa for etapa in consulta if isinstance(etapa, dict))
+            pipeline = consulta if tiene_project else consulta + [{"$project": CAMPOS_PESADOS}]
+
+            filas = list(col.aggregate(pipeline))
             return json_util.dumps(filas, ensure_ascii=False) if filas else "La agregación no devolvió resultados."
 
         elif operacion == "count":
@@ -120,7 +156,7 @@ def ejecutar_mongo(
 
         elif operacion == "insert_one":
             res = col.insert_one(datos)
-            return "Documento insertado correctamente con ID: " + str(res.inserted_id)
+            return "Documento insertado con ID: " + str(res.inserted_id)
 
         elif operacion == "update_many":
             res = col.update_many(consulta, datos)
@@ -140,16 +176,21 @@ def ejecutar_mongo(
 tools = [obtener_esquema_mongo, ejecutar_mongo]
 
 
-# 4. FUNCIÓN PARA PROBAR Y CRONOMETRAR CADA MODELO
+# 4. EJECUCIÓN Y COMPARATIVA DE MODELOS
 def probar_modelo(nombre_modelo: str, pregunta: str):
     print("\n" + "=" * 60)
     print("PROBANDO MODELO (MongoDB):", nombre_modelo)
     print("=" * 60)
 
+    # Desactivamos el pensamiento largo en Qwen3 para acelerar la respuesta
+    #extra_params = {"reasoning": False} if "qwen3" in nombre_modelo.lower() else {}
+
     llm = ChatOllama(
         model=nombre_modelo,
         temperature=0,
+        num_ctx=8192,
         keep_alive="15m",
+        #**extra_params,
     )
 
     agente = create_agent(
@@ -158,14 +199,34 @@ def probar_modelo(nombre_modelo: str, pregunta: str):
         system_prompt=SYSTEM_PROMPT,
     )
 
-    spinner = Spinner("Ejecutando")
+    spinner = Spinner("Pensando")
     inicio = time.perf_counter()
     spinner.iniciar()
 
     try:
-        for paso in agente.stream({"messages": [("user", pregunta)]}, stream_mode="values"):
+        # recursion_limit=10 evita bucles infinitos si un modelo se atasca
+        for paso in agente.stream(
+            {"messages": [("user", pregunta)]},
+            stream_mode="values",
+            config={"recursion_limit": 10},
+        ):
+            msg = paso["messages"][-1]
+            if msg.type == "human":
+                continue
+
             spinner.detener()
-            paso["messages"][-1].pretty_print()
+
+            if msg.type == "ai" and msg.tool_calls:
+                for llamada in msg.tool_calls:
+                    print("[Herramienta] ->", llamada["name"], "| Args:", llamada["args"])
+            elif msg.type == "tool":
+                contenido = str(msg.content)
+                vista_previa = contenido[:140] + "..." if len(contenido) > 140 else contenido
+                print("[BD respondió] ->", vista_previa)
+            elif msg.type == "ai" and msg.content:
+                print("\n--- RESPUESTA FINAL ---")
+                print(msg.content)
+
             spinner.iniciar()
     finally:
         spinner.detener()
