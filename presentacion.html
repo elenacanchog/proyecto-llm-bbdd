@@ -1100,8 +1100,8 @@ body.has-turned .hint{opacity:0;transform:translateX(-50%) translateY(6px);point
             </div>
             <hr class="rule">
             <div class="stack-sm">
-              <div class="row"><span class="icon-box" style="width:28px;height:28px;color:var(--accent);"><svg class="icon"><use href="#i-x"></use></svg></span><span class="small"><strong>BD completa</strong> → prompt</span><span class="pill">descartado</span></div>
-              <div class="row"><span class="icon-box" style="width:28px;height:28px;color:var(--green);"><svg class="icon"><use href="#i-check"></use></svg></span><span class="small"><strong>Esquema + pregunta</strong> → consulta</span><span class="pill accent">elegido</span></div>
+              <div class="row"><span class="icon-box" style="width:28px;height:28px;color:var(--accent);"><svg class="icon"><use href="#i-x"></use></svg></span><span class="small"><strong>BD completa</strong> -> prompt</span><span class="pill">descartado</span></div>
+              <div class="row"><span class="icon-box" style="width:28px;height:28px;color:var(--green);"><svg class="icon"><use href="#i-check"></use></svg></span><span class="small"><strong>Esquema + pregunta</strong> -> consulta</span><span class="pill accent">elegido</span></div>
             </div>
             <div class="note">La solución no es meter más datos: es generar la consulta correcta y leer solo lo que hace falta.</div>
           </div>
@@ -1642,6 +1642,8 @@ df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<sp
   let spread = 0;
   let mobilePage = 0;
   let animating = false;
+  let turnToken = 0;
+  let pendingModeCheck = false;
   let suppressClickUntil = 0;
   let touchX = null;
   let touchY = null;
@@ -1666,9 +1668,13 @@ df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<sp
 
   function clearTransient() {
     pages.forEach(p => p.classList.remove('z-top', 'z-mid', 'z-under', 'is-hidden', 'slide-out', 'slide-in'));
+    // Evita que al quitar .go se dispare la transición inversa de la hoja.
+    leaf.style.transition = 'none';
     leaf.className = 'leaf';
     leafFront.innerHTML = '';
     leafBack.innerHTML = '';
+    void leaf.offsetWidth;
+    leaf.style.transition = '';
   }
 
   function setActiveSpread(s) {
@@ -1699,14 +1705,20 @@ df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<sp
 
   function turnDesktop(dir) {
     if (animating) return;
-    const target = spread + dir;
+    const from = spread;
+    const target = from + dir;
     if (target < 0 || target >= totalSpreads) return;
     markTurned();
     if (reduceMotion) { setActiveSpread(target); return; }
-    animating = true;
 
-    const currentLeft = pageAt(spread, 'left');
-    const currentRight = pageAt(spread, 'right');
+    animating = true;
+    const myToken = ++turnToken;
+    // Fijar el destino ya: si algo interrumpe la animación, no se vuelve atrás.
+    spread = target;
+    updateHud();
+
+    const currentLeft = pageAt(from, 'left');
+    const currentRight = pageAt(from, 'right');
     const nextLeft = pageAt(target, 'left');
     const nextRight = pageAt(target, 'right');
     const frontSource = dir > 0 ? currentRight : currentLeft;
@@ -1739,28 +1751,40 @@ df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<sp
     leaf.getBoundingClientRect();
     requestAnimationFrame(() => leaf.classList.add('go'));
 
+    let fallbackId = 0;
     const finish = () => {
-      if (!animating) return;
+      if (!animating || myToken !== turnToken) return;
       animating = false;
+      window.clearTimeout(fallbackId);
       leaf.removeEventListener('transitionend', onEnd);
       setActiveSpread(target);
+      if (pendingModeCheck) {
+        pendingModeCheck = false;
+        applyMode();
+      }
     };
     const onEnd = (e) => {
       if (e.target === leaf && e.propertyName === 'transform') finish();
     };
     leaf.addEventListener('transitionend', onEnd);
-    window.setTimeout(() => { if (animating) finish(); }, 1000);
+    fallbackId = window.setTimeout(finish, 950);
   }
 
   function turnMobile(dir) {
     if (animating) return;
-    const target = mobilePage + dir;
+    const from = mobilePage;
+    const target = from + dir;
     if (target < 0 || target >= totalPages) return;
     markTurned();
     if (reduceMotion) { setActiveMobile(target); return; }
-    animating = true;
 
-    const current = pages[mobilePage];
+    animating = true;
+    const myToken = ++turnToken;
+    // Igual que en escritorio: el destino queda fijado antes de animar.
+    mobilePage = target;
+    updateHud();
+
+    const current = pages[from];
     const next = pages[target];
     next.classList.add('is-active', 'slide-in');
     next.setAttribute('aria-hidden', 'false');
@@ -1768,12 +1792,17 @@ df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<sp
     current.classList.add('slide-out');
 
     window.setTimeout(() => {
+      if (!animating || myToken !== turnToken) return;
       current.classList.remove('is-active', 'slide-out');
       current.setAttribute('aria-hidden', 'true');
       next.classList.remove('slide-in');
       next.style.zIndex = '';
       animating = false;
       setActiveMobile(target);
+      if (pendingModeCheck) {
+        pendingModeCheck = false;
+        applyMode();
+      }
     }, 380);
   }
 
@@ -1784,6 +1813,7 @@ df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<sp
   const prev = () => turn(-1);
 
   function applyMode() {
+    if (animating) { pendingModeCheck = true; return; }
     const nextMobile = mq.matches;
     if (nextMobile === mobile) return;
     if (nextMobile) {
