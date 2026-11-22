@@ -73,7 +73,7 @@ body::after{
   min-height:100vh;
   display:grid;
   place-items:center;
-  padding:3.5vh 2.5vw 9vh;
+  padding:1.5vh 2vw 6vh;
 }
 .book-wrap{position:relative;}
 .book-wrap::before{
@@ -89,7 +89,7 @@ body::after{
 }
 .book{
   position:relative;
-  width:min(94vw,1480px,138vh);
+  width:min(96vw, calc(min(92vh, 980px) * 1.6));
   aspect-ratio:16/10;
   perspective:2600px;
   transform-style:preserve-3d;
@@ -200,13 +200,13 @@ body::after{
   display:flex;
   justify-content:space-between;
   gap:10px;
-  font-size:clamp(7.5px,1.22cqw,10px);
+  font-size:clamp(9px,1.7cqw,13px);
   letter-spacing:.16em;
   text-transform:uppercase;
   color:var(--muted);
   border-bottom:1px solid var(--rule);
   padding-bottom:6px;
-  margin-bottom:clamp(9px,1.7cqw,17px);
+  margin-bottom:clamp(10px,1.9cqw,18px);
 }
 .folio{
   display:flex;
@@ -216,7 +216,7 @@ body::after{
   margin-top:auto;
   padding-top:7px;
   border-top:1px solid var(--rule);
-  font-size:clamp(7.5px,1.22cqw,10px);
+  font-size:clamp(9px,1.7cqw,13px);
   letter-spacing:.13em;
   text-transform:uppercase;
   color:var(--muted);
@@ -226,7 +226,7 @@ body::after{
 /* ---------- Tipografía ---------- */
 .kicker{
   display:block;
-  font-size:clamp(7.5px,1.22cqw,10px);
+  font-size:clamp(9px,1.7cqw,13px);
   line-height:1.2;
   letter-spacing:.18em;
   text-transform:uppercase;
@@ -236,7 +236,7 @@ body::after{
 }
 .h1{
   font-family:var(--serif);
-  font-size:clamp(27px,5.35cqw,50px);
+  font-size:clamp(32px,6.7cqw,56px);
   line-height:.98;
   letter-spacing:-.035em;
   font-weight:600;
@@ -244,7 +244,7 @@ body::after{
 }
 .h2{
   font-family:var(--serif);
-  font-size:clamp(21px,3.65cqw,34px);
+  font-size:clamp(25px,4.9cqw,42px);
   line-height:1.02;
   letter-spacing:-.025em;
   font-weight:600;
@@ -252,32 +252,32 @@ body::after{
 }
 .h3{
   font-family:var(--serif);
-  font-size:clamp(13px,2.1cqw,19px);
+  font-size:clamp(17px,3cqw,24px);
   line-height:1.1;
   letter-spacing:-.015em;
   font-weight:600;
   margin:0;
 }
 .lead{
-  font-size:clamp(13px,2.35cqw,20px);
-  line-height:1.42;
+  font-size:clamp(17px,3.6cqw,30px);
+  line-height:1.4;
   color:var(--ink-soft);
   margin:0;
 }
 .body{
-  font-size:clamp(11px,2.05cqw,15.5px);
-  line-height:1.55;
+  font-size:clamp(17px,3.1cqw,24px);
+  line-height:1.5;
   color:var(--ink-soft);
   margin:0;
 }
 .small{
-  font-size:clamp(9px,1.52cqw,12px);
+  font-size:clamp(12px,2.2cqw,17px);
   line-height:1.42;
   color:var(--muted);
   margin:0;
 }
 .tiny{
-  font-size:clamp(7.5px,1.2cqw,10px);
+  font-size:clamp(10px,1.8cqw,14px);
   line-height:1.35;
   color:var(--muted);
   margin:0;
@@ -301,12 +301,12 @@ body::after{
 }
 .pullquote{
   font-family:var(--serif);
-  font-size:clamp(16px,2.75cqw,26px);
+  font-size:clamp(21px,4.2cqw,36px);
   line-height:1.12;
   letter-spacing:-.02em;
   color:var(--ink);
-  border-left:2px solid var(--accent);
-  padding-left:clamp(8px,1.2cqw,12px);
+  border-left:3px solid var(--accent);
+  padding-left:clamp(10px,1.6cqw,16px);
   margin:0;
 }
 .rule{border:0;border-top:1px solid var(--rule);margin:0;}
@@ -323,7 +323,18 @@ body::after{
 }
 .filler.plate{display:flex;flex-direction:column;}
 .filler.plate .code,.filler.plate .terminal{flex:1;display:flex;flex-direction:column;justify-content:center;}
-.filler.data-table{flex:none;}
+.filler.table-wrap{display:flex;flex-direction:column;justify-content:center;min-height:0;}
+.filler.table-wrap > *{margin:0;}
+
+/* ---------- Pliegos: texto a la izquierda, evidencia a la derecha ---------- */
+.explain .page-body,.evidence .page-body{justify-content:space-between;gap:clamp(9px,1.7cqw,16px);}
+.explain .pullquote{margin-top:clamp(8px,1.5cqw,14px);}
+.explain .icon-box{width:clamp(44px,6.6cqw,64px);height:clamp(44px,6.6cqw,64px);}
+.evidence .plate,.evidence .placeholder{width:100%;}
+.evidence .stat-row{gap:clamp(7px,1.3cqw,12px);}
+.evidence .stat{padding-top:5px;}
+.evidence .stat .v{font-size:clamp(24px,4.2cqw,38px);}
+.evidence .stat .l{font-size:clamp(9px,1.55cqw,12px);}
 
 /* ---------- Utilidades de composición ---------- */
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.5cqw,14px);}
@@ -340,39 +351,39 @@ body::after{
   padding-top:clamp(5px,.9cqw,8px);
   min-width:0;
 }
-.card h3{margin:0 0 3px;font-family:var(--serif);font-size:clamp(12px,1.95cqw,18px);line-height:1.1;font-weight:600;}
-.card p{margin:0;font-size:clamp(9px,1.55cqw,12px);line-height:1.42;color:var(--muted);}
+.card h3{margin:0 0 4px;font-family:var(--serif);font-size:clamp(16px,2.8cqw,23px);line-height:1.1;font-weight:600;}
+.card p{margin:0;font-size:clamp(13px,2.25cqw,18px);line-height:1.42;color:var(--muted);}
 .card .num{
   display:block;
   font-family:var(--mono);
-  font-size:clamp(7.5px,1.2cqw,9.5px);
+  font-size:clamp(10px,1.7cqw,13px);
   color:var(--accent);
   letter-spacing:.12em;
-  margin-bottom:3px;
+  margin-bottom:4px;
 }
 .note{
   border:1px solid var(--rule);
   background:rgba(255,255,255,.24);
-  padding:clamp(7px,1.2cqw,11px);
-  font-size:clamp(9px,1.55cqw,12px);
+  padding:clamp(9px,1.6cqw,15px);
+  font-size:clamp(13px,2.25cqw,18px);
   line-height:1.45;
   color:var(--ink-soft);
 }
 .note strong{color:var(--ink);}
-.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(7px,1.2cqw,12px);}
-.stat{border-top:1px solid var(--rule);padding-top:5px;}
-.stat .v{font-family:var(--serif);font-size:clamp(21px,3.5cqw,34px);line-height:1;letter-spacing:-.04em;color:var(--accent);}
-.stat .l{font-size:clamp(7.5px,1.18cqw,9.5px);line-height:1.3;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-top:2px;}
-.pill-row{display:flex;flex-wrap:wrap;gap:4px;}
+.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,1.5cqw,14px);}
+.stat{border-top:1px solid var(--rule);padding-top:6px;}
+.stat .v{font-family:var(--serif);font-size:clamp(28px,5cqw,44px);line-height:1;letter-spacing:-.04em;color:var(--accent);}
+.stat .l{font-size:clamp(10px,1.8cqw,14px);line-height:1.3;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-top:3px;}
+.pill-row{display:flex;flex-wrap:wrap;gap:5px;}
 .pill{
   display:inline-flex;
   align-items:center;
-  gap:4px;
+  gap:5px;
   border:1px solid var(--rule);
   border-radius:999px;
-  padding:2px 7px;
+  padding:3px 10px;
   font-family:var(--mono);
-  font-size:clamp(7px,1.12cqw,9px);
+  font-size:clamp(10px,1.7cqw,13px);
   line-height:1.35;
   letter-spacing:.01em;
   color:var(--ink-soft);
@@ -392,8 +403,8 @@ body::after{
   flex:none;
 }
 .icon-box{
-  width:clamp(32px,4.1cqw,46px);
-  height:clamp(32px,4.1cqw,46px);
+  width:clamp(40px,6cqw,60px);
+  height:clamp(40px,6cqw,60px);
   border:1px solid var(--rule);
   border-radius:50%;
   display:grid;
@@ -418,9 +429,9 @@ body::after{
   justify-content:space-between;
   gap:8px;
   align-items:center;
-  margin-bottom:5px;
+  margin-bottom:7px;
   font-family:var(--mono);
-  font-size:clamp(7px,1.1cqw,8.5px);
+  font-size:clamp(9px,1.6cqw,12px);
   letter-spacing:.08em;
   text-transform:uppercase;
   color:var(--muted);
@@ -430,9 +441,9 @@ body::after{
   background:#1b1a17;
   color:#eee7da;
   border-radius:4px;
-  padding:clamp(7px,1.25cqw,12px);
+  padding:clamp(10px,1.8cqw,18px);
   font-family:var(--mono);
-  font-size:clamp(7.5px,1.45cqw,11.5px);
+  font-size:clamp(12px,2.1cqw,17px);
   line-height:1.55;
   overflow:hidden;
   white-space:pre-wrap;
@@ -449,9 +460,9 @@ body::after{
   background:#121411;
   color:#c7d6c0;
   border-radius:4px;
-  padding:clamp(7px,1.25cqw,12px);
+  padding:clamp(10px,1.8cqw,18px);
   font-family:var(--mono);
-  font-size:clamp(7px,1.38cqw,11px);
+  font-size:clamp(11px,2cqw,16px);
   line-height:1.55;
   overflow:hidden;
   white-space:pre-wrap;
@@ -481,42 +492,42 @@ body::after{
   background:var(--rule);
 }
 .flow-num{
-  width:22px;
-  height:22px;
+  width:26px;
+  height:26px;
   border-radius:50%;
   border:1px solid var(--accent);
   color:var(--accent);
   display:grid;
   place-items:center;
   font-family:var(--mono);
-  font-size:clamp(7px,1.1cqw,9px);
+  font-size:clamp(10px,1.6cqw,13px);
   background:var(--paper);
   position:relative;
   z-index:1;
 }
-.flow-step h4{margin:0;font-family:var(--serif);font-size:clamp(12px,1.9cqw,18px);line-height:1.1;font-weight:600;}
-.flow-step p{margin:2px 0 0;font-size:clamp(9px,1.55cqw,12px);line-height:1.4;color:var(--muted);}
+.flow-step h4{margin:0;font-family:var(--serif);font-size:clamp(17px,2.8cqw,23px);line-height:1.1;font-weight:600;}
+.flow-step p{margin:3px 0 0;font-size:clamp(13px,2.25cqw,18px);line-height:1.4;color:var(--muted);}
 
 /* ---------- Tablas ---------- */
 .data-table{
   width:100%;
   border-collapse:collapse;
-  font-size:clamp(8.5px,1.5cqw,11.5px);
+  font-size:clamp(12px,2.1cqw,17px);
   line-height:1.35;
 }
 .data-table th{
   text-align:left;
-  font-size:clamp(7px,1.1cqw,9px);
+  font-size:clamp(10px,1.7cqw,13px);
   text-transform:uppercase;
   letter-spacing:.12em;
   color:var(--muted);
   font-weight:600;
   border-bottom:1px solid var(--rule-strong);
-  padding:5px 4px;
+  padding:7px 5px;
 }
 .data-table td{
   border-bottom:1px solid var(--rule);
-  padding:5px 4px;
+  padding:7px 5px;
   vertical-align:top;
   color:var(--ink-soft);
 }
@@ -526,18 +537,18 @@ body::after{
 .compare{
   width:100%;
   border-collapse:collapse;
-  font-size:clamp(8.5px,1.5cqw,11.5px);
+  font-size:clamp(12px,2.1cqw,17px);
   line-height:1.35;
 }
 .compare th{
   font-family:var(--serif);
-  font-size:clamp(10px,1.65cqw,14px);
+  font-size:clamp(14px,2.4cqw,20px);
   font-weight:600;
   text-align:left;
   border-bottom:1px solid var(--ink);
-  padding:5px 3px;
+  padding:7px 5px;
 }
-.compare td{border-bottom:1px solid var(--rule);padding:5px 3px;color:var(--ink-soft);}
+.compare td{border-bottom:1px solid var(--rule);padding:7px 5px;color:var(--ink-soft);}
 .compare td:first-child{color:var(--muted);}
 
 /* ---------- Marcador de imágenes ---------- */
@@ -559,9 +570,9 @@ body::after{
   background-size:22px 22px;
   color:var(--muted);
 }
-.placeholder .ph-icon{width:clamp(26px,3.4cqw,38px);height:clamp(26px,3.4cqw,38px);opacity:.45;fill:currentColor;}
-.placeholder .ph-title{font-family:var(--serif);font-size:clamp(15px,2.4cqw,24px);line-height:1.1;color:var(--ink-soft);}
-.placeholder .ph-note{font-size:clamp(8px,1.35cqw,11px);line-height:1.4;max-width:85%;}
+.placeholder .ph-icon{width:clamp(40px,6cqw,60px);height:clamp(40px,6cqw,60px);opacity:.45;fill:currentColor;}
+.placeholder .ph-title{font-family:var(--serif);font-size:clamp(19px,3.4cqw,30px);line-height:1.1;color:var(--ink-soft);}
+.placeholder .ph-note{font-size:clamp(12px,2cqw,16px);line-height:1.4;max-width:85%;}
 .placeholder.tall{min-height:clamp(220px,44cqw,420px);}
 
 /* ---------- Portada ---------- */
@@ -576,7 +587,7 @@ body::after{
 .cover-left .tiny{color:rgba(245,240,230,.38);}
 .cover-left-title{
   font-family:var(--serif);
-  font-size:clamp(38px,7.3cqw,76px);
+  font-size:clamp(46px,8.6cqw,92px);
   line-height:.88;
   letter-spacing:-.045em;
   font-weight:400;
@@ -586,12 +597,12 @@ body::after{
 .cover-quote{
   font-family:var(--serif);
   font-style:italic;
-  font-size:clamp(15px,2.4cqw,24px);
+  font-size:clamp(18px,3cqw,30px);
   line-height:1.12;
   color:var(--paper);
   border-top:1px solid rgba(245,240,230,.18);
   border-bottom:1px solid rgba(245,240,230,.18);
-  padding:clamp(7px,1.2cqw,11px) 0;
+  padding:clamp(9px,1.6cqw,15px) 0;
 }
 .cover-orbit{
   position:absolute;
@@ -613,9 +624,9 @@ body::after{
 .cover-footer{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;position:relative;z-index:2;}
 .cover-index-mini{
   font-family:var(--mono);
-  font-size:clamp(6.5px,1.02cqw,8px);
+  font-size:clamp(9px,1.6cqw,12px);
   line-height:1.7;
-  color:rgba(245,240,230,.48);
+  color:rgba(245,240,230,.5);
   text-align:right;
   letter-spacing:.04em;
 }
@@ -637,23 +648,23 @@ body::after{
 .cover-top{position:relative;z-index:2;margin-top:clamp(10px,2cqw,22px);}
 .cover-title{
   font-family:var(--serif);
-  font-size:clamp(44px,9.5cqw,92px);
+  font-size:clamp(52px,11cqw,110px);
   line-height:.82;
   letter-spacing:-.055em;
   font-weight:600;
   text-transform:uppercase;
-  margin:clamp(8px,1.4cqw,14px) 0 0;
+  margin:clamp(10px,1.8cqw,18px) 0 0;
 }
 .cover-title em{font-style:italic;text-transform:none;color:var(--accent);}
 .cover-sub{
-  max-width:88%;
-  margin:clamp(10px,1.8cqw,18px) 0 0;
-  font-size:clamp(11px,1.75cqw,15px);
+  max-width:90%;
+  margin:clamp(12px,2cqw,20px) 0 0;
+  font-size:clamp(15px,2.6cqw,21px);
   line-height:1.4;
   color:var(--ink-soft);
 }
 .cover-art-wrap{position:relative;z-index:2;margin:auto 0;padding:clamp(6px,1.2cqw,12px) 0;}
-.cover-art{display:block;width:100%;height:auto;max-height:23vh;color:var(--ink);}
+.cover-art{display:block;width:100%;height:auto;max-height:20vh;color:var(--ink);}
 .cover-bottom{
   display:flex;
   justify-content:space-between;
@@ -665,7 +676,7 @@ body::after{
   z-index:2;
 }
 .cover-bottom .tag-row{display:flex;flex-wrap:wrap;gap:4px;max-width:72%;}
-.cover-edition{font-family:var(--mono);font-size:clamp(6.5px,1.02cqw,8px);letter-spacing:.06em;color:var(--muted);text-align:right;}
+.cover-edition{font-family:var(--mono);font-size:clamp(9px,1.6cqw,12px);letter-spacing:.06em;color:var(--muted);text-align:right;}
 
 /* ---------- Cierre ---------- */
 .closing-left{background:#171614;color:var(--paper);}
@@ -678,7 +689,7 @@ body::after{
 .closing-left .pill{color:rgba(245,240,230,.82);border-color:rgba(245,240,230,.24);background:rgba(245,240,230,.08);}
 .closing-title{
   font-family:var(--serif);
-  font-size:clamp(27px,4.7cqw,46px);
+  font-size:clamp(36px,6.8cqw,60px);
   line-height:1.02;
   letter-spacing:-.035em;
   font-weight:400;
@@ -688,7 +699,7 @@ body::after{
 .closing-right .page-inner{justify-content:space-between;}
 .closing-right .big-thanks{
   font-family:var(--serif);
-  font-size:clamp(42px,8.4cqw,82px);
+  font-size:clamp(56px,11cqw,108px);
   line-height:.86;
   letter-spacing:-.05em;
   font-weight:600;
@@ -887,22 +898,27 @@ body.has-turned .hint{opacity:0;transform:translateX(-50%) translateY(6px);point
   .page-body{gap:clamp(4px,1.1cqw,8px);}
   .running{margin-bottom:clamp(6px,1.3cqw,10px);}
   .filler .card{padding-bottom:4px;}
-  .running,.folio,.kicker{font-size:clamp(7px,1.9cqw,9px);}
-  .h1{font-size:clamp(23px,6.2cqw,31px);}
-  .h2{font-size:clamp(18px,4.5cqw,25px);}
-  .lead{font-size:clamp(11.5px,3.1cqw,14.5px);}
-  .body{font-size:clamp(10px,2.7cqw,12.5px);}
-  .small{font-size:clamp(8px,2.2cqw,10px);}
-  .tiny{font-size:clamp(7px,1.9cqw,9px);}
-  .pullquote{font-size:clamp(14px,3.8cqw,20px);}
-  .card h3{font-size:clamp(12px,3cqw,16px);}
-  .card p,.note,.flow-step p{font-size:clamp(8.5px,2.35cqw,10.5px);}
-  .stat .v{font-size:clamp(19px,5cqw,28px);}
-  .stat .l{font-size:clamp(7px,1.9cqw,9px);}
-  .pill{font-size:clamp(7px,1.9cqw,8.5px);}
-  .code,.terminal{font-size:clamp(7px,2cqw,9px);}
-  .data-table,.compare{font-size:clamp(8px,2.2cqw,10px);}
-  .flow-step h4{font-size:clamp(12px,3cqw,16px);}
+  .explain .page-body,.evidence .page-body{gap:clamp(7px,2cqw,11px);}
+  .running,.folio,.kicker{font-size:clamp(9px,2.2cqw,11px);}
+  .h1{font-size:clamp(26px,7cqw,38px);}
+  .h2{font-size:clamp(21px,5.4cqw,31px);}
+  .lead{font-size:clamp(15px,3.9cqw,19px);}
+  .body{font-size:clamp(13.5px,3.6cqw,17px);}
+  .small{font-size:clamp(11px,2.9cqw,14px);}
+  .tiny{font-size:clamp(9px,2.4cqw,11px);}
+  .pullquote{font-size:clamp(18px,4.8cqw,25px);}
+  .card h3{font-size:clamp(15px,3.8cqw,20px);}
+  .card p,.note,.flow-step p{font-size:clamp(12px,3.1cqw,15px);}
+  .stat .v{font-size:clamp(24px,6cqw,34px);}
+  .stat .l{font-size:clamp(9px,2.3cqw,11px);}
+  .pill{font-size:clamp(9px,2.3cqw,11px);}
+  .plate-label{font-size:clamp(9px,2.3cqw,11px);}
+  .code,.terminal{font-size:clamp(11px,2.9cqw,13.5px);}
+  .data-table,.compare{font-size:clamp(11px,2.9cqw,13.5px);}
+  .flow-step h4{font-size:clamp(15px,3.8cqw,20px);}
+  .placeholder .ph-title{font-size:clamp(17px,4.4cqw,23px);}
+  .placeholder .ph-note{font-size:clamp(11px,2.9cqw,14px);}
+  .cover-index-mini,.cover-edition{font-size:clamp(9px,2.3cqw,11px);}
 }
 @keyframes mobileIn{from{transform:translateX(10%);opacity:0;}to{transform:none;opacity:1;}}
 
@@ -1004,29 +1020,23 @@ body.has-turned .hint{opacity:0;transform:translateX(-50%) translateY(6px);point
         </div>
       </section>
 
-      <section class="page" data-spread="1" data-side="left" data-page="03" data-section="Sumario" aria-label="Editorial, página 3">
+      <section class="page explain" data-spread="1" data-side="left" data-page="03" data-section="Sumario" aria-label="Editorial, página 3">
         <div class="page-inner">
           <header class="running"><span>03 · Sumario</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">Editorial</p>
             <h1 class="h1">Una pregunta<br>sencilla.</h1>
             <p class="lead">¿Y si hablar con una base de datos fuera tan fácil como preguntarle a un compañero?</p>
-            <p class="body dropcap">Este proyecto explora esa idea con dos bases de datos muy distintas: las tablas de meteoritos de la NASA y los documentos anidados de Airbnb. LangChain actúa como pegamento; Ollama ejecuta modelos en local; Groq los ejecuta en la nube. La pregunta es la misma. La arquitectura cambia.</p>
-            <p class="body">No buscamos que el modelo “sepa” la base de datos. Buscamos que aprenda a preguntarle: que lea el esquema, genere una consulta válida y explique el resultado con los datos delante.</p>
-            <div class="pullquote">El LLM no lee la base de datos: aprende a preguntarle.</div>
-            <div class="grid-2 filler">
-              <div class="card"><span class="num">Ficha</span><h3>Asignatura</h3><p>Bases de datos · Ingeniería Informática · 2026.</p></div>
-              <div class="card"><span class="num">Ficha</span><h3>Stack</h3><p>Python, LangChain, Streamlit, PostgreSQL y MongoDB.</p></div>
-              <div class="card"><span class="num">Ficha</span><h3>Modelos</h3><p>Tres en Groq y dos en Ollama, con la misma pregunta.</p></div>
-              <div class="card"><span class="num">Ficha</span><h3>Formato</h3><p>Catorce pliegos, veintiocho páginas. Una revista, no un PowerPoint.</p></div>
-            </div>
-            <div class="note"><strong>Una revista, no un PowerPoint.</strong> Cada pliego está pensado como una doble página: una idea a la izquierda, su consecuencia a la derecha.</div>
+            <p class="body dropcap">Dos bases muy distintas: meteoritos de la NASA en PostgreSQL y alojamientos de Airbnb en MongoDB. LangChain orquesta, Ollama ejecuta en local y Groq lo hace en la nube.</p>
+            <p class="body">No buscamos que el modelo sepa la base de datos. Buscamos que lea el esquema, escriba una consulta válida y explique el resultado con datos reales delante.</p>
+            <div class="pullquote">El modelo no lee la base de datos: aprende a preguntarle.</div>
+            <p class="small">Ficha · Bases de datos · Ingeniería Informática · 2026 · Catorce pliegos, veintiocho páginas.</p>
           </div>
           <footer class="folio"><span class="fnum">03</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="1" data-side="right" data-page="04" data-section="Sumario" aria-label="Índice, página 4">
+      <section class="page evidence" data-spread="1" data-side="right" data-page="04" data-section="Sumario" aria-label="Índice, página 4">
         <div class="page-inner">
           <header class="running"><span>04 · Sumario</span><span>PBD / 2026</span></header>
           <div class="page-body">
@@ -1049,177 +1059,128 @@ body.has-turned .hint{opacity:0;transform:translateX(-50%) translateY(6px);point
                 <tr><td class="em">Cierre</td><td>27</td></tr>
               </tbody>
             </table>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">01</span><h3>SQL</h3><p>Meteoritos de la NASA en PostgreSQL: 45.761 filas y un agente que lee el esquema.</p></div>
-              <div class="card"><span class="num">02</span><h3>Documentos</h3><p>Alojamientos de Airbnb en MongoDB: 5.555 documentos anidados.</p></div>
-              <div class="card"><span class="num">03</span><h3>Demo</h3><p>Streamlit para la ruta cloud y terminal para las rutas locales.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;"><strong>Cómo leer.</strong> Haz clic en la página derecha para avanzar y en la izquierda para volver. También puedes usar las flechas del teclado, deslizar en el móvil o pulsar <span class="mono">F</span> para pantalla completa.</div>
-            <div class="row-between">
-              <span class="tiny">5 modelos · 2 bases de datos · 3 rutas de acceso</span>
-              <span class="pill accent">Edición 01</span>
-            </div>
+            <div class="note"><strong>Cómo leer.</strong> Clic derecho avanza, clic izquierdo vuelve. También funcionan las flechas, el swipe y <span class="mono">F</span> para pantalla completa.</div>
           </div>
           <footer class="folio"><span class="fnum">04</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="2" data-side="left" data-page="05" data-section="El reto" aria-label="El reto, página 5">
+      <section class="page explain" data-spread="2" data-side="left" data-page="05" data-section="El reto" aria-label="El reto, página 5">
         <div class="page-inner">
           <header class="running"><span>05 · El reto</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">01 · El reto</p>
             <h1 class="h1">El problema no es la IA.<br>Es el contexto.</h1>
             <p class="lead">Un LLM no puede leer 5.555 documentos y 45.761 filas en cada pregunta. Y no debería.</p>
-            <p class="body">La tentación es enorme: coger la base de datos, convertirla en texto y meterla en el prompt. El resultado sería caro, lento y frágil. La ventana de contexto se llena antes de que llegue la pregunta; cada token viaja, se procesa y se paga; y los datos dejan de estar bajo control.</p>
-            <p class="body">La alternativa es más interesante: darle al modelo el mapa, no el territorio. El esquema, los tipos y unos pocos ejemplos. Con eso puede escribir una consulta que el motor de la base de datos ejecuta en milisegundos.</p>
+            <p class="body">Meter la base de datos en el prompt sería caro, lento y frágil. La ventana se llena antes de llegar la pregunta; cada token viaja, se procesa y se paga.</p>
+            <p class="body">La alternativa: darle el mapa, no el territorio. Esquema, tipos y ejemplos. El motor ejecuta la consulta en milisegundos.</p>
             <div class="stat-row">
               <div class="stat"><div class="v">5.555</div><div class="l">documentos Airbnb</div></div>
               <div class="stat"><div class="v">45.761</div><div class="l">filas de meteoritos</div></div>
               <div class="stat"><div class="v">5</div><div class="l">modelos comparados</div></div>
-              <div class="stat"><div class="v">0</div><div class="l">bases de datos en el prompt</div></div>
+              <div class="stat"><div class="v">0</div><div class="l">bases en el prompt</div></div>
             </div>
-            <div class="grid-2 filler">
-              <div class="card"><span class="num">SQL</span><h3>¿Cuál es el meteorito más pesado?</h3><p>Un <span class="mono">SELECT ... ORDER BY mass_g DESC LIMIT 3</span> sobre la tabla de meteoritos.</p></div>
-              <div class="card"><span class="num">NoSQL</span><h3>¿Qué alojamiento tiene wifi?</h3><p>Un <span class="mono">$match</span> con <span class="mono">$all</span>, seguido de <span class="mono">$sort</span>, <span class="mono">$project</span> y <span class="mono">$limit</span>.</p></div>
-            </div>
-            <div class="pullquote" style="margin-top:auto;">El mapa, no el territorio.</div>
+            <div class="pullquote">El mapa, no el territorio.</div>
           </div>
           <footer class="folio"><span class="fnum">05</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="2" data-side="right" data-page="06" data-section="El reto" aria-label="El reto, página 6">
+      <section class="page evidence" data-spread="2" data-side="right" data-page="06" data-section="El reto" aria-label="El reto, página 6">
         <div class="page-inner">
           <header class="running"><span>06 · El reto</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">Las cuatro tensiones</p>
-            <h2 class="h2">Lo que se rompe al meterlo todo en el prompt.</h2>
+            <h2 class="h2">Lo que se rompe al meterlo todo.</h2>
             <div class="grid-2">
-              <div class="card"><span class="num">01</span><h3>Contexto</h3><p>La ventana se llena antes de que llegue la pregunta. Los documentos largos desplazan la instrucción.</p></div>
-              <div class="card"><span class="num">02</span><h3>Coste</h3><p>Cada token viaja, se procesa y se paga. Repetir la base de datos en cada consulta no escala.</p></div>
-              <div class="card"><span class="num">03</span><h3>Privacidad</h3><p>Los datos no siempre pueden salir de casa. Enviar la base de datos a una API es una decisión, no un detalle.</p></div>
-              <div class="card"><span class="num">04</span><h3>Verdad</h3><p>Sin datos delante, el modelo rellena huecos. La respuesta suena bien y puede ser falsa.</p></div>
+              <div class="card"><span class="num">01</span><h3>Contexto</h3><p>La ventana se llena antes de que llegue la pregunta.</p></div>
+              <div class="card"><span class="num">02</span><h3>Coste</h3><p>Cada token viaja, se procesa y se paga.</p></div>
+              <div class="card"><span class="num">03</span><h3>Privacidad</h3><p>Enviar los datos a una API es una decisión.</p></div>
+              <div class="card"><span class="num">04</span><h3>Verdad</h3><p>Sin datos delante, el modelo rellena huecos.</p></div>
             </div>
             <hr class="rule">
             <div class="stack-sm">
-              <div class="row"><span class="icon-box" style="width:26px;height:26px;color:var(--accent);"><svg class="icon"><use href="#i-x"></use></svg></span><span class="small"><strong>BD completa</strong> → prompt</span><span class="pill">descartado</span></div>
-              <div class="row"><span class="icon-box" style="width:26px;height:26px;color:var(--green);"><svg class="icon"><use href="#i-check"></use></svg></span><span class="small"><strong>Esquema + pregunta</strong> → consulta</span><span class="pill accent">elegido</span></div>
+              <div class="row"><span class="icon-box" style="width:28px;height:28px;color:var(--accent);"><svg class="icon"><use href="#i-x"></use></svg></span><span class="small"><strong>BD completa</strong> → prompt</span><span class="pill">descartado</span></div>
+              <div class="row"><span class="icon-box" style="width:28px;height:28px;color:var(--green);"><svg class="icon"><use href="#i-check"></use></svg></span><span class="small"><strong>Esquema + pregunta</strong> → consulta</span><span class="pill accent">elegido</span></div>
             </div>
-            <div class="grid-2 filler">
-              <div class="card"><span class="num">Antes</span><h3>La base de datos en el prompt</h3><p>5.555 documentos y 45.761 filas viajando en cada pregunta. Contexto, coste y privacidad disparados.</p></div>
-              <div class="card"><span class="num">Ahora</span><h3>El esquema en el prompt</h3><p>Campos, tipos y un ejemplo. El motor filtra y devuelve solo tres o cinco registros.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;">La solución no es meter más datos: es generar la consulta correcta y leer solo lo que hace falta.</div>
+            <div class="note">La solución no es meter más datos: es generar la consulta correcta y leer solo lo que hace falta.</div>
           </div>
           <footer class="folio"><span class="fnum">06</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-<section class="page" data-spread="3" data-side="left" data-page="07" data-section="LangChain" aria-label="LangChain, página 7">
+      <section class="page explain" data-spread="3" data-side="left" data-page="07" data-section="LangChain" aria-label="LangChain, página 7">
         <div class="page-inner">
           <header class="running"><span>07 · LangChain</span><span>PBD / 2026</span></header>
           <div class="page-body">
-            <p class="kicker">02 · La herramienta</p>
-            <h1 class="h1">LangChain: el pegamento entre el lenguaje y los datos.</h1>
-            <p class="lead">No es un modelo. Es una capa de orquestación que conecta prompts, modelos, herramientas y agentes.</p>
-            <p class="body">En el proyecto aparece en dos formas. En la nube, como una cadena de dos pasos: generar la consulta y redactar la respuesta. En local, como un agente que decide qué herramienta usar, observa el resultado y vuelve a intentarlo si hace falta.</p>
-            <div class="plate">
-              <div class="plate-label"><span>python · lcel</span><span>langchain_core</span></div>
-              <pre class="code"><span class="k">from</span> langchain_core.prompts <span class="k">import</span> ChatPromptTemplate
-
-prompt = ChatPromptTemplate.from_messages([
-    (<span class="s">"system"</span>, <span class="s">"Traduce la pregunta a un pipeline."</span>),
-    (<span class="s">"human"</span>, <span class="s">"{pregunta}"</span>),
-])
-
-chain = prompt | llm
-respuesta = chain.invoke({<span class="s">"pregunta"</span>: pregunta})</pre>
-            </div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">Cloud</span><h3>Cadena de dos pasos</h3><p>Generar la consulta y redactar la respuesta con Groq y LangChain.</p></div>
-              <div class="card"><span class="num">Local</span><h3>Agente con tools</h3><p><span class="mono">create_agent</span> elige la herramienta, observa y reintenta.</p></div>
-              <div class="card"><span class="num">Demo</span><h3>Streamlit</h3><p>La interfaz se apoya en la misma cadena para mostrar resultados y métricas.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;">LangChain no sustituye al motor de la base de datos: lo consulta.</div>
-            <div class="row">
-              <span class="icon-box"><svg class="icon"><use href="#i-langchain"></use></svg></span>
-              <div><p class="small" style="color:var(--ink);"><strong>LangChain</strong></p><p class="tiny">Orquestación, no inferencia.</p></div>
-            </div>
+            <div class="row"><span class="icon-box"><svg class="icon"><use href="#i-langchain"></use></svg></span><p class="kicker" style="margin:0;">02 · La herramienta</p></div>
+            <h1 class="h1">LangChain:<br>el pegamento.</h1>
+            <p class="lead">No es un modelo. Es una capa que conecta prompts, modelos, herramientas y agentes.</p>
+            <p class="body">En la nube, una cadena de dos pasos: generar la consulta y redactar la respuesta. En local, un agente elige herramientas, observa el resultado y reintenta si hace falta.</p>
+            <p class="body">Nos permite cambiar de modelo y de base de datos sin reescribir la fontanería.</p>
+            <div class="pullquote">No sustituye al motor de la base de datos: lo consulta.</div>
           </div>
           <footer class="folio"><span class="fnum">07</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="3" data-side="right" data-page="08" data-section="LangChain" aria-label="LangChain, página 8">
+      <section class="page evidence" data-spread="3" data-side="right" data-page="08" data-section="LangChain" aria-label="LangChain, página 8">
         <div class="page-inner">
           <header class="running"><span>08 · LangChain</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">Las piezas</p>
             <h2 class="h2">Cuatro piezas, un flujo.</h2>
-            <div class="grid-2">
-              <div class="card"><span class="num">01</span><h3>ChatPromptTemplate</h3><p>Separa el rol, el esquema y la pregunta. El mismo molde sirve para local y para cloud.</p></div>
-              <div class="card"><span class="num">02</span><h3>LCEL</h3><p><span class="mono">prompt | llm</span>. Composición legible, con streaming y metadatos incluidos.</p></div>
-              <div class="card"><span class="num">03</span><h3>@tool</h3><p>Convierte una función Python en una capacidad que el agente puede invocar.</p></div>
-              <div class="card"><span class="num">04</span><h3>create_agent</h3><p>El bucle pensar → actuar → observar, sin escribirlo a mano.</p></div>
+            <div class="plate">
+              <div class="plate-label"><span>python · lcel</span><span>langchain_core</span></div>
+              <pre class="code"><span class="k">from</span> langchain_core.prompts <span class="k">import</span> ChatPromptTemplate
+
+prompt = ChatPromptTemplate.from_messages([
+    (<span class="s">"system"</span>, <span class="s">"Traduce a pipeline."</span>),
+    (<span class="s">"human"</span>, <span class="s">"{pregunta}"</span>),
+])
+chain = prompt | llm</pre>
             </div>
             <div class="plate">
               <div class="plate-label"><span>python · tool</span><span>langchain_core.tools</span></div>
               <pre class="code"><span class="k">@tool</span>
 <span class="k">def</span> ejecutar_sql(consulta: str) -&gt; str:
-    <span class="s">"""Ejecuta SQL en PostgreSQL y devuelve el resultado."""</span>
+    <span class="s">"""Ejecuta SQL y devuelve filas."""</span>
     ...</pre>
             </div>
             <div class="plate filler">
               <div class="plate-label"><span>terminal · bucle del agente</span><span>tools</span></div>
-              <pre class="terminal"><span class="dim">[Pensar]</span>   necesito los campos de la tabla
-            <span class="dim">[Tool]</span>     obtener_esquema
-            <span class="dim">[Observar]</span> meteoritos: name, mass_g, year...
-            <span class="dim">[Pensar]</span>   ya puedo escribir la consulta
-            <span class="ok">[Respuesta]</span> 3 filas + explicación en español</pre>
+              <pre class="terminal"><span class="dim">[Pensar]</span>   necesito los campos
+<span class="dim">[Tool]</span>     obtener_esquema
+<span class="dim">[Observar]</span> name, mass_g, year...
+<span class="ok">[Respuesta]</span> 3 filas + explicación</pre>
             </div>
-            <div class="note" style="margin-top:auto;">No hay magia: cada pieza es código que podemos leer, sustituir y depurar.</div>
           </div>
           <footer class="folio"><span class="fnum">08</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="4" data-side="left" data-page="09" data-section="La decisión" aria-label="Por qué LangChain, página 9">
+      <section class="page explain" data-spread="4" data-side="left" data-page="09" data-section="La decisión" aria-label="Por qué LangChain, página 9">
         <div class="page-inner">
           <header class="running"><span>09 · La decisión</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">03 · La decisión</p>
-            <h1 class="h1">¿Por qué LangChain y no el SDK de turno?</h1>
-            <p class="lead">Porque el proyecto cambia de modelo, de base de datos y de estrategia. La capa de orquestación evita reescribir la fontanería.</p>
-            <div class="grid-2">
-              <div class="card"><span class="num">01</span><h3>Un modelo, muchos proveedores</h3><p><span class="mono">ChatOllama</span> y <span class="mono">ChatGroq</span> comparten interfaz. Cambiar de entorno es cambiar una línea.</p></div>
-              <div class="card"><span class="num">02</span><h3>Menos fontanería</h3><p>Prompts, herramientas, agentes y streaming ya están resueltos y probados.</p></div>
-              <div class="card"><span class="num">03</span><h3>Metadatos y streaming</h3><p>Tokens, tiempos y pasos intermedios sin inventar instrumentación.</p></div>
-              <div class="card"><span class="num">04</span><h3>Un lenguaje común</h3><p>El mismo <span class="mono">prompt | llm</span> en local y en cloud. La arquitectura se parece.</p></div>
-            </div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">01</span><h3>Una interfaz</h3><p><span class="mono">ChatOllama</span> y <span class="mono">ChatGroq</span> se comportan igual en la cadena.</p></div>
-              <div class="card"><span class="num">02</span><h3>Baterías incluidas</h3><p>Prompts, herramientas, agentes y streaming sin escribirlos desde cero.</p></div>
-              <div class="card"><span class="num">03</span><h3>Una pega</h3><p>La capa es código ajeno: hay que leerla, actualizarla y depurarla.</p></div>
-            </div>
-            <div class="pullquote" style="margin-top:auto;">La decisión no fue “usar IA”. Fue elegir dónde poner la complejidad.</div>
+            <h1 class="h1">¿Por qué<br>LangChain?</h1>
+            <p class="lead">Porque cambiamos de modelo, de base de datos y de estrategia. La capa de orquestación evita reescribir la fontanería.</p>
+            <p class="body">Una misma interfaz para <span class="mono">ChatOllama</span> y <span class="mono">ChatGroq</span>. Prompts, tools, agentes y streaming ya resueltos. Metadatos sin instrumentar a mano.</p>
+            <p class="body">La pega: es código ajeno. Hay que leerlo, actualizarlo y saber depurar un agente que da vueltas.</p>
+            <div class="pullquote">La decisión no fue «usar IA». Fue elegir dónde poner la complejidad.</div>
+            <div class="pill-row"><span class="pill">interfaz única</span><span class="pill">baterías incluidas</span><span class="pill">más dependencias</span></div>
           </div>
           <footer class="folio"><span class="fnum">09</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="4" data-side="right" data-page="10" data-section="La decisión" aria-label="Por qué LangChain, página 10">
+      <section class="page evidence" data-spread="4" data-side="right" data-page="10" data-section="La decisión" aria-label="Por qué LangChain, página 10">
         <div class="page-inner">
           <header class="running"><span>10 · La decisión</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">El otro lado</p>
             <h2 class="h2">Lo que nos costó.</h2>
-            <div class="grid-2">
-              <div class="card"><span class="num">01</span><h3>Abstracción</h3><p>Menos control sobre el prompt exacto y sobre lo que ocurre entre bambalinas.</p></div>
-              <div class="card"><span class="num">02</span><h3>Versiones</h3><p>APIs que cambian y ejemplos que envejecen. La documentación es parte del trabajo.</p></div>
-              <div class="card"><span class="num">03</span><h3>Depuración</h3><p>Un agente puede dar vueltas. Hay que poner límites, tiempos y trazas.</p></div>
-              <div class="card"><span class="num">04</span><h3>Dependencias</h3><p>Una capa más que instalar, actualizar y entender.</p></div>
-            </div>
             <table class="compare">
               <thead><tr><th></th><th>LangChain</th><th>SDK directo</th></tr></thead>
               <tbody>
@@ -1229,143 +1190,134 @@ respuesta = chain.invoke({<span class="s">"pregunta"</span>: pregunta})</pre>
                 <tr><td>Dependencias</td><td>Más</td><td>Menos</td></tr>
               </tbody>
             </table>
-            <div class="grid-2 filler">
-              <div class="card"><span class="num">Sí</span><h3>Cuando el escenario cambia</h3><p>Distintos modelos, dos bases de datos y dos estrategias de acceso conviven en el mismo proyecto.</p></div>
-              <div class="card"><span class="num">No</span><h3>Cuando solo hay un proveedor</h3><p>Si todo está cerrado y no hay herramientas, el SDK directo es más simple y más transparente.</p></div>
+            <div class="grid-2">
+              <div class="card"><span class="num">Sí</span><h3>Cuando el escenario cambia</h3><p>Distintos modelos, dos bases y dos estrategias conviven.</p></div>
+              <div class="card"><span class="num">No</span><h3>Cuando hay un proveedor</h3><p>Sin tools ni cambios, el SDK directo es más simple.</p></div>
             </div>
-            <div class="pullquote" style="margin-top:auto;">Nos ahorró la fontanería; no sustituye entender la base de datos.</div>
+            <div class="note">Nos ahorró la fontanería; no sustituye entender la base de datos.</div>
           </div>
           <footer class="folio"><span class="fnum">10</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-<section class="page" data-spread="5" data-side="left" data-page="11" data-section="Arquitectura" aria-label="Arquitectura, página 11">
+      <section class="page explain" data-spread="5" data-side="left" data-page="11" data-section="Arquitectura" aria-label="Arquitectura, página 11">
         <div class="page-inner">
           <header class="running"><span>11 · Arquitectura</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">04 · Arquitectura</p>
-            <h1 class="h1">Cómo accedemos a los datos.</h1>
+            <h1 class="h1">Cómo accedemos<br>a los datos.</h1>
             <p class="lead">El LLM nunca recibe la base de datos. Recibe el esquema, genera una consulta y lee solo el resultado.</p>
             <div class="flow">
-              <div class="flow-step"><span class="flow-num">01</span><div><h4>Esquema</h4><p>Campos, tipos, subdocumentos y unos pocos ejemplos. El mapa, no el territorio.</p></div></div>
-              <div class="flow-step"><span class="flow-num">02</span><div><h4>Consulta</h4><p>El modelo traduce la pregunta a un <em>aggregation pipeline</em> de MongoDB o a SQL.</p></div></div>
-              <div class="flow-step"><span class="flow-num">03</span><div><h4>Motor</h4><p>MongoDB Atlas o PostgreSQL ejecuta el filtrado y devuelve solo los registros relevantes.</p></div></div>
-              <div class="flow-step"><span class="flow-num">04</span><div><h4>Síntesis</h4><p>Una segunda llamada redacta la respuesta en español con los datos delante.</p></div></div>
+              <div class="flow-step"><span class="flow-num">01</span><div><h4>Esquema</h4><p>Campos, tipos y un ejemplo. El mapa, no el territorio.</p></div></div>
+              <div class="flow-step"><span class="flow-num">02</span><div><h4>Consulta</h4><p>El modelo escribe SQL o un aggregation pipeline de MongoDB.</p></div></div>
+              <div class="flow-step"><span class="flow-num">03</span><div><h4>Motor</h4><p>PostgreSQL o MongoDB filtra y devuelve solo lo relevante.</p></div></div>
+              <div class="flow-step"><span class="flow-num">04</span><div><h4>Síntesis</h4><p>Una segunda llamada redacta la respuesta en español.</p></div></div>
             </div>
-            <div class="plate filler">
-              <div class="plate-label"><span>python · schema grounding</span><span>anti-alucinaciones</span></div>
-              <pre class="code">esquema = obtener_esquema()   <span class="c"># campos, tipos, un ejemplo</span>
-            prompt = ChatPromptTemplate.from_messages([
-                (<span class="s">"system"</span>, <span class="s">"Usa solo este esquema: {esquema}"</span>),
-                (<span class="s">"human"</span>, <span class="s">"{pregunta}"</span>),
-            ])
-            consulta = (prompt | llm).invoke({<span class="s">"pregunta"</span>: pregunta, <span class="s">"esquema"</span>: esquema})</pre>
-            </div>
-            <div class="note" style="margin-top:auto;">El esquema se inyecta en el prompt; los datos se quedan en el motor.</div>
-            <div class="row wrap"><span class="pill accent">Pipeline determinista</span><span class="pill">Groq + MongoDB Atlas</span><span class="pill">temperature = 0</span></div>
+            <p class="small">Pipeline determinista · Groq + MongoDB Atlas · <span class="mono">temperature = 0</span></p>
           </div>
           <footer class="folio"><span class="fnum">11</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="5" data-side="right" data-page="12" data-section="Arquitectura" aria-label="Arquitectura, página 12">
+      <section class="page evidence" data-spread="5" data-side="right" data-page="12" data-section="Arquitectura" aria-label="Arquitectura, página 12">
         <div class="page-inner">
           <header class="running"><span>12 · Arquitectura</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">El otro camino</p>
             <h2 class="h2">Agente con herramientas.</h2>
-            <p class="body">En local, el modelo no genera una consulta a ciegas: decide qué herramienta usar, lee la observación y repite el ciclo si el resultado no responde a la pregunta.</p>
-            <div class="flow">
-              <div class="flow-step"><span class="flow-num">01</span><div><h4>Pregunta</h4><p>El usuario escribe en español.</p></div></div>
-              <div class="flow-step"><span class="flow-num">02</span><div><h4>Agente</h4><p>Elige entre <span class="mono">obtener_esquema</span> y <span class="mono">ejecutar_sql</span> / <span class="mono">ejecutar_mongo</span>.</p></div></div>
-              <div class="flow-step"><span class="flow-num">03</span><div><h4>Tool</h4><p>La herramienta consulta la base de datos y devuelve texto.</p></div></div>
-              <div class="flow-step"><span class="flow-num">04</span><div><h4>Observación</h4><p>El resultado vuelve al modelo, que decide si ya puede responder.</p></div></div>
-              <div class="flow-step"><span class="flow-num">05</span><div><h4>Respuesta</h4><p>Incluye la consulta ejecutada y los datos que la sostienen.</p></div></div>
+            <div class="plate">
+              <div class="plate-label"><span>python · schema grounding</span><span>anti-alucinaciones</span></div>
+              <pre class="code">esquema = obtener_esquema()
+prompt = ChatPromptTemplate.from_messages([
+    (<span class="s">"system"</span>, <span class="s">"Usa solo: {esquema}"</span>),
+    (<span class="s">"human"</span>, <span class="s">"{pregunta}"</span>),
+])
+consulta = (prompt | llm).invoke(... )</pre>
             </div>
             <div class="plate filler">
               <div class="plate-label"><span>terminal · agente local</span><span>observaciones</span></div>
-              <pre class="terminal"><span class="dim">→</span> usuario:         ¿apartamentos en Barcelona con wifi?
-            <span class="dim">→</span> obtener_esquema: address.market, amenities, price...
-            <span class="dim">→</span> ejecutar_mongo:  aggregate | $match + $all
-            <span class="dim">→</span> observación:     3 documentos
-            <span class="ok">→</span> respuesta:      nombres, precios y enlace de cada uno</pre>
+              <pre class="terminal"><span class="dim">→</span> usuario:        ¿apartamentos con wifi?
+<span class="dim">→</span> obtener_esquema: market, amenities, price...
+<span class="dim">→</span> ejecutar_mongo:  $match + $all
+<span class="dim">→</span> observación:    3 documentos
+<span class="ok">→</span> respuesta:     nombres y precios</pre>
             </div>
-            <div class="row wrap" style="margin-top:auto;"><span class="pill accent">Agente local</span><span class="pill">Ollama + PostgreSQL / MongoDB</span><span class="pill">create_agent</span></div>
             <div class="note">Dos caminos, una misma regla: el dato manda.</div>
           </div>
           <footer class="folio"><span class="fnum">12</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="6" data-side="left" data-page="13" data-section="Ollama" aria-label="Ollama, página 13">
+      <section class="page explain" data-spread="6" data-side="left" data-page="13" data-section="Ollama" aria-label="Ollama, página 13">
         <div class="page-inner">
           <header class="running"><span>13 · Ollama</span><span>PBD / 2026</span></header>
           <div class="page-body">
-            <div class="row"><span class="icon-box" style="color:var(--ink);"><svg class="icon"><use href="#i-ollama"></use></svg></span><p class="kicker" style="margin:0;">05 · Local</p></div>
-            <h1 class="h1">La IA que vive en tu portátil.</h1>
+            <div class="row"><span class="icon-box"><svg class="icon"><use href="#i-ollama"></use></svg></span><p class="kicker" style="margin:0;">05 · Local</p></div>
+            <h1 class="h1">La IA que vive<br>en tu portátil.</h1>
             <p class="lead">Ollama descarga y ejecuta modelos en tu máquina. Expone una API compatible con OpenAI y se integra con LangChain mediante <span class="mono">ChatOllama</span>.</p>
-            <p class="body">Es la opción privada: el prompt, los datos y la respuesta no salen de casa. También es la opción barata: no hay tokens que pagar. El precio se paga en hardware, velocidad y calidad.</p>
-            <div class="pill-row"><span class="pill">qwen3.5:4b</span><span class="pill">gemma-4</span><span class="pill">num_ctx = 8192</span><span class="pill">keep_alive = 15m</span></div>
+            <p class="body">Es la opción privada: el prompt, los datos y la respuesta no salen de casa. También es la barata: no hay tokens que pagar. El precio se paga en hardware, velocidad y calidad.</p>
+            <div class="pill-row"><span class="pill">qwen3.5:4b</span><span class="pill">gemma-4</span><span class="pill">num_ctx = 8192</span><span class="pill">keep_alive = 15m</span><span class="pill">temperature = 0</span></div>
+            <div class="pullquote">El modelo no sale de casa; el dato tampoco.</div>
+          </div>
+          <footer class="folio"><span class="fnum">13</span><span>Revista de proyectos</span></footer>
+        </div>
+      </section>
+
+      <section class="page evidence" data-spread="6" data-side="right" data-page="14" data-section="Ollama" aria-label="Ollama, página 14">
+        <div class="page-inner">
+          <header class="running"><span>14 · Ollama</span><span>PBD / 2026</span></header>
+          <div class="page-body">
+            <p class="kicker">La evidencia</p>
+            <h2 class="h2">Así se configura.</h2>
             <div class="plate">
               <div class="plate-label"><span>python · ollama</span><span>langchain_ollama</span></div>
               <pre class="code"><span class="k">from</span> langchain_ollama <span class="k">import</span> ChatOllama
 <span class="k">from</span> langchain.agents <span class="k">import</span> create_agent
 
 llm = ChatOllama(model=<span class="s">"gemma-4"</span>, temperature=<span class="n">0</span>)
-agent = create_agent(model=llm, tools=tools, system_prompt=SYSTEM_PROMPT)</pre>
-            </div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">01</span><h3>Instalación</h3><p>Un demonio en la máquina y modelos descargados con <span class="mono">ollama pull</span>.</p></div>
-              <div class="card"><span class="num">02</span><h3>Modelos</h3><p><span class="mono">qwen3.5:4b</span> y <span class="mono">gemma-4</span>, con <span class="mono">temperature = 0</span>.</p></div>
-              <div class="card"><span class="num">03</span><h3>Contexto</h3><p><span class="mono">num_ctx = 8192</span> y <span class="mono">keep_alive = 15m</span> para no recargar en cada pregunta.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;">El mismo agente sirve para SQL y NoSQL; solo cambian las herramientas.</div>
-          </div>
-          <footer class="folio"><span class="fnum">13</span><span>Revista de proyectos</span></footer>
-        </div>
-      </section>
-
-      <section class="page" data-spread="6" data-side="right" data-page="14" data-section="Ollama" aria-label="Ollama, página 14">
-        <div class="page-inner">
-          <header class="running"><span>14 · Ollama</span><span>PBD / 2026</span></header>
-          <div class="page-body">
-            <p class="kicker">La balanza</p>
-            <h2 class="h2">Lo que ganamos. Lo que cedemos.</h2>
-            <div class="grid-2">
-              <div class="card"><span class="num" style="color:var(--green);">+</span><h3>Privacidad</h3><p>El dato no sale de la máquina. Ideal para información sensible.</p></div>
-              <div class="card"><span class="num" style="color:var(--accent);">−</span><h3>Hardware</h3><p>La calidad y la velocidad dependen de la GPU, la RAM y el modelo elegido.</p></div>
-              <div class="card"><span class="num" style="color:var(--green);">+</span><h3>Coste cero</h3><p>No hay factura por token. Solo electricidad y tiempo.</p></div>
-              <div class="card"><span class="num" style="color:var(--accent);">−</span><h3>Calidad</h3><p>Un modelo de 4B no compite con uno de 120B en consultas complejas.</p></div>
+agent = create_agent(model=llm, tools=tools,
+                     system_prompt=SYSTEM_PROMPT)</pre>
             </div>
             <div class="plate">
               <div class="plate-label"><span>terminal · agente local</span><span>streaming</span></div>
               <pre class="terminal"><span class="dim">[Herramienta]</span> -&gt; obtener_esquema_mongo
-<span class="dim">[BD respondió]</span> -&gt; Colección 'datos' | campos y ejemplo...
-<span class="dim">[Herramienta]</span> -&gt; ejecutar_mongo | aggregate
+<span class="dim">[BD respondió]</span> -&gt; campos y ejemplo...
+<span class="dim">[Herramienta]</span> -&gt; ejecutar_mongo
 <span class="ok">--- RESPUESTA FINAL ---</span>
-3 apartamentos en Barcelona con Wifi y aire acondicionado.</pre>
+3 apartamentos en Barcelona con Wifi.</pre>
             </div>
-            <div class="grid-2 filler">
-              <div class="card"><span class="num">Modelos</span><h3>qwen3.5:4b · gemma-4</h3><p>Dos modelos locales con los que se probaron los agentes de SQL y MongoDB.</p></div>
-              <div class="card"><span class="num">Contexto</span><h3>8.192 tokens</h3><p>Ventana configurada en Ollama para que quepan esquema, instrucciones y resultado.</p></div>
-              <div class="card"><span class="num">Memoria</span><h3>15 minutos</h3><p><span class="mono">keep_alive</span> mantiene el modelo cargado entre preguntas.</p></div>
-              <div class="card"><span class="num">Salida</span><h3>Temperatura 0</h3><p>La misma pregunta debe producir la misma consulta: reproducibilidad antes que creatividad.</p></div>
+            <div class="stat-row">
+              <div class="stat"><div class="v">2</div><div class="l">modelos locales</div></div>
+              <div class="stat"><div class="v">8192</div><div class="l">tokens de contexto</div></div>
+              <div class="stat"><div class="v">15m</div><div class="l">modelo en memoria</div></div>
+              <div class="stat"><div class="v">0</div><div class="l">temperatura</div></div>
             </div>
-            <div class="note" style="margin-top:auto;">El modelo no sale de casa; el dato tampoco.</div>
           </div>
           <footer class="folio"><span class="fnum">14</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-<section class="page" data-spread="7" data-side="left" data-page="15" data-section="Groq" aria-label="Groq, página 15">
+      <section class="page explain" data-spread="7" data-side="left" data-page="15" data-section="Groq" aria-label="Groq, página 15">
         <div class="page-inner">
           <header class="running"><span>15 · Groq</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <div class="row"><span class="icon-box" style="color:var(--accent);"><svg class="icon"><use href="#i-groq"></use></svg></span><p class="kicker" style="margin:0;">06 · Cloud</p></div>
-            <h1 class="h1">Velocidad de vértigo, fuera de casa.</h1>
-            <p class="lead">Groq ejecuta modelos abiertos en su hardware y los expone con una API compatible con OpenAI. Ideal para comparar modelos sin montar infraestructura.</p>
-            <p class="body">La nube cambia el perfil de riesgo: los datos salen de la máquina, pero la latencia baja y la calidad sube. En este proyecto es la ruta que alimenta la demo de Streamlit.</p>
+            <h1 class="h1">Velocidad de vértigo,<br>fuera de casa.</h1>
+            <p class="lead">Groq ejecuta modelos abiertos en su hardware con una API compatible con OpenAI. Ideal para comparar modelos sin montar infraestructura.</p>
+            <p class="body">La nube baja la latencia y sube la calidad, pero los datos salen de la máquina. Es la ruta que alimenta la demo de Streamlit.</p>
             <div class="pill-row"><span class="pill">openai/gpt-oss-120b</span><span class="pill">qwen/qwen3.8-27b</span><span class="pill">openai/gpt-oss-20b</span></div>
+            <div class="pullquote">La nube es otra forma de pagar por contexto.</div>
+          </div>
+          <footer class="folio"><span class="fnum">15</span><span>Revista de proyectos</span></footer>
+        </div>
+      </section>
+
+      <section class="page evidence" data-spread="7" data-side="right" data-page="16" data-section="Groq" aria-label="Groq, página 16">
+        <div class="page-inner">
+          <header class="running"><span>16 · Groq</span><span>PBD / 2026</span></header>
+          <div class="page-body">
+            <p class="kicker">La evidencia</p>
+            <h2 class="h2">Local vs cloud.</h2>
             <div class="plate">
               <div class="plate-label"><span>python · groq</span><span>langchain_groq</span></div>
               <pre class="code"><span class="k">from</span> langchain_groq <span class="k">import</span> ChatGroq
@@ -1374,92 +1326,52 @@ llm = ChatGroq(
     model=<span class="s">"openai/gpt-oss-120b"</span>,
     temperature=<span class="n">0</span>,
 )
-respuesta = (prompt | llm).invoke({<span class="s">"pregunta"</span>: pregunta})</pre>
+respuesta = (prompt | llm).invoke(...)</pre>
             </div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">120b</span><h3>gpt-oss-120b</h3><p>El modelo de referencia para la batería de pruebas en MongoDB Atlas.</p></div>
-              <div class="card"><span class="num">27b</span><h3>qwen3.8-27b</h3><p>Alternativa intermedia dentro del mismo proveedor y la misma interfaz.</p></div>
-              <div class="card"><span class="num">20b</span><h3>gpt-oss-20b</h3><p>La opción más ligera de la familia, útil para comparar coste y calidad.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;">La clave vive en <span class="mono">.env</span>; nunca en el código.</div>
-          </div>
-          <footer class="folio"><span class="fnum">15</span><span>Revista de proyectos</span></footer>
-        </div>
-      </section>
-
-      <section class="page" data-spread="7" data-side="right" data-page="16" data-section="Groq" aria-label="Groq, página 16">
-        <div class="page-inner">
-          <header class="running"><span>16 · Groq</span><span>PBD / 2026</span></header>
-          <div class="page-body">
-            <p class="kicker">La balanza</p>
-            <h2 class="h2">Local vs cloud.</h2>
             <table class="compare">
-              <thead><tr><th></th><th>Local · Ollama</th><th>Cloud · Groq</th></tr></thead>
+              <thead><tr><th></th><th>Ollama</th><th>Groq</th></tr></thead>
               <tbody>
-                <tr><td>Privacidad</td><td>Total</td><td>Depende del proveedor</td></tr>
+                <tr><td>Privacidad</td><td>Total</td><td>Del proveedor</td></tr>
                 <tr><td>Coste</td><td>Hardware</td><td>Por token</td></tr>
                 <tr><td>Latencia</td><td>Variable</td><td>Baja</td></tr>
-                <tr><td>Calidad</td><td>Limitada por el equipo</td><td>Alta</td></tr>
+                <tr><td>Calidad</td><td>Según equipo</td><td>Alta</td></tr>
                 <tr><td>Offline</td><td>Sí</td><td>No</td></tr>
               </tbody>
             </table>
-            <div class="note"><strong>temperature = 0.</strong> En generación de consultas, la creatividad es un riesgo: queremos una salida reproducible, no una sorpresa.</div>
-            <div class="grid-2">
-              <div class="card"><span class="num">Local</span><h3>Control</h3><p>Privacidad y coste fijo. El límite es el hardware.</p></div>
-              <div class="card"><span class="num">Cloud</span><h3>Alcance</h3><p>Más calidad y menos latencia. El límite es la factura y la confianza.</p></div>
-            </div>
-            <div class="grid-2 filler">
-              <div class="card"><span class="num">Local</span><h3>Elige Ollama si…</h3><p>Los datos no pueden salir, no hay presupuesto por token o el equipo tiene GPU.</p></div>
-              <div class="card"><span class="num">Cloud</span><h3>Elige Groq si…</h3><p>Necesitas latencia baja, modelos grandes y no almacenas información sensible.</p></div>
-            </div>
-            <div class="pullquote" style="margin-top:auto;">La nube no es magia: es otra forma de pagar por contexto.</div>
+            <div class="note"><strong>temperature = 0.</strong> En generación de consultas queremos reproducibilidad, no sorpresas. La clave vive en <span class="mono">.env</span>.</div>
           </div>
           <footer class="folio"><span class="fnum">16</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="8" data-side="left" data-page="17" data-section="SQL" aria-label="SQL, página 17">
+      <section class="page explain" data-spread="8" data-side="left" data-page="17" data-section="SQL" aria-label="SQL, página 17">
         <div class="page-inner">
           <header class="running"><span>17 · SQL</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <div class="row"><span class="icon-box" style="color:var(--blue);"><svg class="icon"><use href="#i-postgresql"></use></svg></span><p class="kicker" style="margin:0;">07 · Relacional</p></div>
             <h1 class="h1">Tablas, filas y un agente que sabe mirar.</h1>
             <p class="lead">45.761 meteoritos de la NASA convertidos en una tabla limpia de PostgreSQL.</p>
-            <p class="body">El CSV original se limpia con pandas: se elimina la columna geográfica, se renombra la masa y se fuerza un entero que admite nulos. Después, SQLAlchemy crea la tabla con tipos explícitos.</p>
+            <p class="body">El CSV se limpia con pandas: se descarta <span class="mono">GeoLocation</span>, se renombra <span class="mono">mass (g)</span> a <span class="mono">mass_g</span> y <span class="mono">year</span> pasa a entero con nulos. SQLAlchemy crea la tabla con tipos explícitos.</p>
             <div class="pill-row"><span class="pill">name</span><span class="pill">mass_g</span><span class="pill">year</span><span class="pill">recclass</span><span class="pill">fall</span><span class="pill">reclat</span><span class="pill">reclong</span></div>
-            <div class="plate">
-              <div class="plate-label"><span>python · carga</span><span>pandas + sqlalchemy</span></div>
-              <pre class="code">df = pd.read_csv(<span class="s">"Meteorite_Landings.csv"</span>)
-df = df.drop(columns=[<span class="s">"GeoLocation"</span>])
-df = df.rename(columns={<span class="s">"mass (g)"</span>: <span class="s">"mass_g"</span>})
-df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<span class="s">"Int64"</span>)
-
-df.to_sql(<span class="s">"meteoritos"</span>, engine, if_exists=<span class="s">"replace"</span>, index=<span class="k">False</span>, dtype=tipos_sql)</pre>
-            </div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">01</span><h3>Quitar ruido</h3><p>Se descarta <span class="mono">GeoLocation</span>: está duplicado en latitud y longitud.</p></div>
-              <div class="card"><span class="num">02</span><h3>Nombres claros</h3><p><span class="mono">mass (g)</span> pasa a <span class="mono">mass_g</span> para que el modelo no adivine.</p></div>
-              <div class="card"><span class="num">03</span><h3>Tipos explícitos</h3><p><span class="mono">year</span> se fuerza a entero con nulos; el resto de campos se declara en SQLAlchemy.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;">El esquema se lee en vivo; no está escrito a mano.</div>
+            <div class="pullquote">El esquema se lee en vivo; no está escrito a mano.</div>
           </div>
           <footer class="folio"><span class="fnum">17</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="8" data-side="right" data-page="18" data-section="SQL" aria-label="SQL, página 18">
+      <section class="page evidence" data-spread="8" data-side="right" data-page="18" data-section="SQL" aria-label="SQL, página 18">
         <div class="page-inner">
           <header class="running"><span>18 · SQL</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">El agente SQL</p>
             <h2 class="h2">Primero mira. Luego escribe.</h2>
-            <div class="flow">
-              <div class="flow-step"><span class="flow-num">01</span><div><h4>Esquema</h4><p><span class="mono">obtener_esquema</span> lista tablas, columnas y tipos con <span class="mono">inspect</span>.</p></div></div>
-              <div class="flow-step"><span class="flow-num">02</span><div><h4>SQL</h4><p>El modelo escribe la consulta con el esquema delante, no de memoria.</p></div></div>
-              <div class="flow-step"><span class="flow-num">03</span><div><h4>Ejecución</h4><p><span class="mono">ejecutar_sql</span> lanza la consulta y devuelve filas o el error.</p></div></div>
-              <div class="flow-step"><span class="flow-num">04</span><div><h4>Respuesta</h4><p>Si falla, el error vuelve al agente y puede reintentar.</p></div></div>
+            <div class="plate">
+              <div class="plate-label"><span>python · carga</span><span>pandas + sqlalchemy</span></div>
+              <pre class="code">df = pd.read_csv(<span class="s">"Meteorite_Landings.csv"</span>)
+df = df.drop(columns=[<span class="s">"GeoLocation"</span>])
+df = df.rename(columns={<span class="s">"mass (g)"</span>: <span class="s">"mass_g"</span>})
+df[<span class="s">"year"</span>] = df[<span class="s">"year"</span>].astype(<span class="s">"Int64"</span>)</pre>
             </div>
-            <div class="note"><strong>Pregunta de ejemplo.</strong> ¿Cuáles son los 3 meteoritos más pesados que cayeron después de 1900?</div>
             <div class="plate">
               <div class="plate-label"><span>sql generado</span><span>postgresql</span></div>
               <pre class="code"><span class="k">SELECT</span> name, mass_g, year
@@ -1470,101 +1382,78 @@ df.to_sql(<span class="s">"meteoritos"</span>, engine, if_exists=<span class="s"
             </div>
             <div class="plate filler">
               <div class="plate-label"><span>terminal · error y reintento</span><span>agente SQL</span></div>
-              <pre class="terminal"><span class="dim">[Tool]</span> ejecutar_sql("SELECT ... WHERE masa &gt; 1000")
-            <span class="dim">[BD]</span>   ERROR: column "masa" does not exist
-            <span class="ok">[Agente]</span> corrige: mass_g, no masa
-            <span class="dim">[Tool]</span> ejecutar_sql(...) → 3 filas</pre>
+              <pre class="terminal"><span class="dim">[Tool]</span> ejecutar_sql("... WHERE masa &gt; 1000")
+<span class="dim">[BD]</span>   ERROR: column "masa" does not exist
+<span class="ok">[Agente]</span> corrige: mass_g, no masa
+<span class="dim">[Tool]</span> ejecutar_sql(...) → 3 filas</pre>
             </div>
-            <div class="row wrap" style="margin-top:auto;"><span class="pill">LIMIT 5 por defecto</span><span class="pill">NULLS LAST</span><span class="pill">errores devueltos al agente</span></div>
           </div>
           <footer class="folio"><span class="fnum">18</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-<section class="page" data-spread="9" data-side="left" data-page="19" data-section="NoSQL" aria-label="NoSQL, página 19">
+      <section class="page explain" data-spread="9" data-side="left" data-page="19" data-section="NoSQL" aria-label="NoSQL, página 19">
         <div class="page-inner">
           <header class="running"><span>19 · NoSQL</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <div class="row"><span class="icon-box" style="color:var(--green);"><svg class="icon"><use href="#i-mongodb"></use></svg></span><p class="kicker" style="margin:0;">08 · Documental</p></div>
             <h1 class="h1">Documentos que se parecen a la realidad.</h1>
             <p class="lead">5.555 alojamientos de Airbnb con campos anidados, listas y tipos propios.</p>
-            <p class="body">MongoDB no impone un esquema rígido. Eso es una ventaja para modelar alojamientos reales y un problema para un LLM que necesita saber qué campos existen. La solución: <em>schema grounding</em>.</p>
+            <p class="body">MongoDB no impone esquema rígido: ventaja para modelar alojamientos reales, problema para un LLM que necesita saber qué campos existen. La solución es <em>schema grounding</em>.</p>
+            <div class="pill-row"><span class="pill">documentos anidados</span><span class="pill">arrays</span><span class="pill">esquema flexible</span><span class="pill">Atlas + local</span></div>
+            <div class="pullquote">El esquema se describe; los documentos no se envían.</div>
+          </div>
+          <footer class="folio"><span class="fnum">19</span><span>Revista de proyectos</span></footer>
+        </div>
+      </section>
+
+      <section class="page evidence" data-spread="9" data-side="right" data-page="20" data-section="NoSQL" aria-label="NoSQL, página 20">
+        <div class="page-inner">
+          <header class="running"><span>20 · NoSQL</span><span>PBD / 2026</span></header>
+          <div class="page-body">
+            <p class="kicker">La evidencia</p>
+            <h2 class="h2">Una tubería, no una frase.</h2>
             <div class="plate">
               <div class="plate-label"><span>json · documento</span><span>sample_airbnb</span></div>
               <pre class="code">{
   <span class="s">"name"</span>: <span class="s">"Sunny flat"</span>,
   <span class="s">"address"</span>: { <span class="s">"market"</span>: <span class="s">"Barcelona"</span> },
   <span class="s">"amenities"</span>: [<span class="s">"Wifi"</span>, <span class="s">"Air conditioning"</span>],
-  <span class="s">"price"</span>: <span class="n">120</span>,
-  <span class="s">"host"</span>: { <span class="s">"host_is_superhost"</span>: <span class="k">true</span> }
+  <span class="s">"price"</span>: <span class="n">120</span>
 }</pre>
             </div>
-            <div class="grid-2 filler">
-              <div class="card"><span class="num">Campo</span><h3>address.market</h3><p>La ciudad anidada. Filtrar por ella requiere conocer la ruta completa del campo.</p></div>
-              <div class="card"><span class="num">Campo</span><h3>amenities</h3><p>Un array: la búsqueda usa <span class="mono">$all</span> para exigir varios servicios a la vez.</p></div>
-              <div class="card"><span class="num">Campo</span><h3>price</h3><p>Llega como <span class="mono">Decimal128</span>; hay que convertirlo antes de devolverlo como JSON.</p></div>
-              <div class="card"><span class="num">Campo</span><h3>host.host_is_superhost</h3><p>Un booleano dentro de un subdocumento: otro ejemplo de por qué hace falta el esquema.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;">El esquema se describe; los documentos no se envían.</div>
-            <div class="row wrap"><span class="pill">documentos anidados</span><span class="pill">arrays</span><span class="pill">esquema flexible</span><span class="pill">Atlas + local</span></div>
-          </div>
-          <footer class="folio"><span class="fnum">19</span><span>Revista de proyectos</span></footer>
-        </div>
-      </section>
-
-      <section class="page" data-spread="9" data-side="right" data-page="20" data-section="NoSQL" aria-label="NoSQL, página 20">
-        <div class="page-inner">
-          <header class="running"><span>20 · NoSQL</span><span>PBD / 2026</span></header>
-          <div class="page-body">
-            <p class="kicker">El pipeline</p>
-            <h2 class="h2">Una tubería, no una frase.</h2>
-            <div class="plate">
+            <div class="plate filler">
               <div class="plate-label"><span>json · aggregation</span><span>text-to-mql</span></div>
               <pre class="code">[
   { <span class="s">"$match"</span>: {
       <span class="s">"address.market"</span>: <span class="s">"Barcelona"</span>,
-      <span class="s">"amenities"</span>: { <span class="s">"$all"</span>: [<span class="s">"Wifi"</span>, <span class="s">"Air conditioning"</span>] }
+      <span class="s">"amenities"</span>: {
+        <span class="s">"$all"</span>: [<span class="s">"Wifi"</span>, <span class="s">"Air conditioning"</span>]
+      }
   }},
   { <span class="s">"$sort"</span>: { <span class="s">"price"</span>: <span class="n">1</span> } },
-  { <span class="s">"$project"</span>: { <span class="s">"_id"</span>: <span class="n">0</span>, <span class="s">"name"</span>: <span class="n">1</span>, <span class="s">"price"</span>: <span class="n">1</span> } },
   { <span class="s">"$limit"</span>: <span class="n">5</span> }
 ]</pre>
             </div>
-            <div class="grid-2">
-              <div class="card"><span class="num">Por qué</span><h3>Pipeline y no find</h3><p>Filtros, orden, proyección y límite en una sola estructura JSON.</p></div>
-              <div class="card"><span class="num">Cuidado</span><h3>BSON → JSON</h3><p>Los precios llegan como <span class="mono">Decimal128</span>; hay que serializarlos con <span class="mono">json_util</span>.</p></div>
-            </div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">01</span><h3>Filtrar primero</h3><p><span class="mono">$match</span> reduce los documentos antes de ordenarlos o proyectarlos.</p></div>
-              <div class="card"><span class="num">02</span><h3>Proyectar después</h3><p><span class="mono">$project</span> elimina reseñas e imágenes que no caben en el contexto.</p></div>
-              <div class="card"><span class="num">03</span><h3>Limitar siempre</h3><p><span class="mono">$limit</span> convierte una respuesta enorme en cinco resultados legibles.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;"><strong>El prompt pide <span class="mono">$project</span> y <span class="mono">$limit</span>.</strong> Sin ellos, un documento de Airbnb puede arrastrar reseñas e imágenes hasta agotar el contexto.</div>
+            <div class="note"><strong>$project y $limit.</strong> Sin ellos, un documento de Airbnb arrastra reseñas e imágenes hasta agotar el contexto.</div>
           </div>
           <footer class="folio"><span class="fnum">20</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="10" data-side="left" data-page="21" data-section="La demo" aria-label="Demo, página 21">
+      <section class="page explain" data-spread="10" data-side="left" data-page="21" data-section="La demo" aria-label="Demo, página 21">
         <div class="page-inner">
           <header class="running"><span>21 · La demo</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">09 · La demo</p>
-            <h1 class="h1">La demo, paso a paso.</h1>
+            <h1 class="h1">La demo,<br>paso a paso.</h1>
+            <p class="lead">Elige entorno, base y modelo. Escribe en español. La herramienta muestra respuesta, consulta, datos y métricas.</p>
             <div class="flow">
-              <div class="flow-step"><span class="flow-num">01</span><div><h4>Entorno</h4><p>Groq en la nube u Ollama en local.</p></div></div>
-              <div class="flow-step"><span class="flow-num">02</span><div><h4>Base de datos</h4><p>MongoDB Atlas o PostgreSQL con meteoritos.</p></div></div>
-              <div class="flow-step"><span class="flow-num">03</span><div><h4>Modelo</h4><p>Elige entre los modelos disponibles en cada entorno.</p></div></div>
-              <div class="flow-step"><span class="flow-num">04</span><div><h4>Pregunta</h4><p>Escribe en español, sin conocer la sintaxis de la base de datos.</p></div></div>
-              <div class="flow-step"><span class="flow-num">05</span><div><h4>Resultado</h4><p>Respuesta, consulta generada, datos crudos y métricas.</p></div></div>
+              <div class="flow-step"><span class="flow-num">01</span><div><h4>Elegir ruta</h4><p>Groq en la nube u Ollama en local.</p></div></div>
+              <div class="flow-step"><span class="flow-num">02</span><div><h4>Preguntar</h4><p>Sin conocer la sintaxis de la base de datos.</p></div></div>
+              <div class="flow-step"><span class="flow-num">03</span><div><h4>Verificar</h4><p>Consulta, datos crudos y métricas a la vista.</p></div></div>
             </div>
-            <div class="grid-4 filler">
-              <div class="card"><span class="num">01</span><h3>Respuesta</h3><p>Texto en español, construido con los datos recuperados.</p></div>
-              <div class="card"><span class="num">02</span><h3>Consulta</h3><p>La consulta generada, visible para verificar el razonamiento.</p></div>
-              <div class="card"><span class="num">03</span><h3>Datos</h3><p>Las filas o documentos crudos que sostienen la respuesta.</p></div>
-              <div class="card"><span class="num">04</span><h3>Métricas</h3><p>Tiempos y tokens de cada llamada al modelo.</p></div>
-            </div>
-            <table class="data-table" style="margin-top:auto;">
+            <table class="data-table">
               <thead><tr><th>Combinación</th><th>Estado</th></tr></thead>
               <tbody>
                 <tr><td class="em">Groq + MongoDB Atlas</td><td>Streamlit · activo</td></tr>
@@ -1573,12 +1462,13 @@ df.to_sql(<span class="s">"meteoritos"</span>, engine, if_exists=<span class="s"
                 <tr><td class="em">Groq + PostgreSQL</td><td>Roadmap</td></tr>
               </tbody>
             </table>
+            <p class="small">Solo la ruta cloud está en Streamlit; las locales se ejecutan por terminal.</p>
           </div>
           <footer class="folio"><span class="fnum">21</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="10" data-side="right" data-page="22" data-section="La demo" aria-label="Demo, página 22">
+      <section class="page evidence" data-spread="10" data-side="right" data-page="22" data-section="La demo" aria-label="Demo, página 22">
         <div class="page-inner">
           <header class="running"><span>22 · La demo</span><span>PBD / 2026</span></header>
           <div class="page-body">
@@ -1593,38 +1483,32 @@ df.to_sql(<span class="s">"meteoritos"</span>, engine, if_exists=<span class="s"
               <div class="plate-label"><span>terminal · arranque</span><span>streamlit</span></div>
               <pre class="code"><span class="p">$</span> streamlit run demo_web.py</pre>
             </div>
-            <p class="tiny" style="text-align:right;">Sustituir este marco por capturas reales.</p>
           </div>
           <footer class="folio"><span class="fnum">22</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-<section class="page" data-spread="11" data-side="left" data-page="23" data-section="Resultados" aria-label="Resultados, página 23">
+      <section class="page explain" data-spread="11" data-side="left" data-page="23" data-section="Resultados" aria-label="Resultados, página 23">
         <div class="page-inner">
           <header class="running"><span>23 · Resultados</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">10 · Resultados</p>
-            <h1 class="h1">Lo que dicen los números.</h1>
-            <p class="lead">Medimos lo que importa: cuánto tarda el modelo en generar la consulta, cuánto tarda la respuesta completa, cuántos tokens consume y si la consulta es válida.</p>
+            <h1 class="h1">Lo que dicen<br>los números.</h1>
+            <p class="lead">Medimos cuánto tarda en generarse la consulta, cuánto tarda la respuesta completa, cuántos tokens consume y si la consulta es válida.</p>
             <div class="stat-row">
-              <div class="stat"><div class="v">t₁</div><div class="l">tiempo de generación de la consulta</div></div>
-              <div class="stat"><div class="v">t₂</div><div class="l">tiempo total de extremo a extremo</div></div>
-              <div class="stat"><div class="v">tok</div><div class="l">tokens consumidos por pregunta</div></div>
-              <div class="stat"><div class="v">✓</div><div class="l">éxito sintáctico de la consulta</div></div>
+              <div class="stat"><div class="v">t₁</div><div class="l">generar consulta</div></div>
+              <div class="stat"><div class="v">t₂</div><div class="l">extremo a extremo</div></div>
+              <div class="stat"><div class="v">tok</div><div class="l">tokens por pregunta</div></div>
+              <div class="stat"><div class="v">✓</div><div class="l">éxito sintáctico</div></div>
             </div>
-            <div class="note"><strong>Batería.</strong> 3 modelos cloud × 3 preguntas × MongoDB Atlas. Las mismas preguntas se repiten en local para comparar arquitecturas.</div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">Q1</span><h3>Alojamientos</h3><p>Apartamentos en Barcelona con wifi y aire acondicionado, ordenados por precio.</p></div>
-              <div class="card"><span class="num">Q2</span><h3>Meteoritos</h3><p>Los tres más pesados que cayeron después de 1900.</p></div>
-              <div class="card"><span class="num">Q3</span><h3>Agregación</h3><p>Una pregunta de filtro, orden y proyección sobre la colección de Airbnb.</p></div>
-            </div>
-            <div class="pullquote" style="margin-top:auto;">No todo modelo que escribe JSON escribe el JSON correcto.</div>
+            <p class="body">Tres preguntas: alojamientos en Barcelona, los meteoritos más pesados y una agregación con filtro, orden y proyección.</p>
+            <div class="pullquote">No todo modelo que escribe JSON escribe el JSON correcto.</div>
           </div>
           <footer class="folio"><span class="fnum">23</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="11" data-side="right" data-page="24" data-section="Resultados" aria-label="Resultados, página 24">
+      <section class="page evidence" data-spread="11" data-side="right" data-page="24" data-section="Resultados" aria-label="Resultados, página 24">
         <div class="page-inner">
           <header class="running"><span>24 · Resultados</span><span>PBD / 2026</span></header>
           <div class="page-body">
@@ -1640,36 +1524,30 @@ df.to_sql(<span class="s">"meteoritos"</span>, engine, if_exists=<span class="s"
                 <tr><td class="em">gemma-4</td><td>—</td><td>—</td><td>—</td></tr>
               </tbody>
             </table>
-            <p class="tiny">Pendiente de completar con la batería de pruebas.</p>
             <div class="plate">
               <div class="plate-label"><span>terminal · batería</span><span>python</span></div>
               <pre class="code"><span class="p">$</span> python src/api_cloud/mongo_api.py</pre>
             </div>
-            <div class="grid-3 filler">
-              <div class="card"><span class="num">t₁</span><h3>Generación</h3><p>Tiempo que tarda el modelo en producir la consulta.</p></div>
-              <div class="card"><span class="num">t₂</span><h3>Extremo a extremo</h3><p>Tiempo total desde la pregunta hasta la respuesta final.</p></div>
-              <div class="card"><span class="num">ok</span><h3>Éxito</h3><p>La consulta es válida, se ejecuta y devuelve datos.</p></div>
-            </div>
-            <div class="note" style="margin-top:auto;">La tabla se actualizará con tiempos, tokens y tasa de éxito reales. Hasta entonces, las celdas quedan vacías a propósito.</div>
+            <div class="note">Pendiente de completar con la batería de pruebas. Hasta entonces, las celdas quedan vacías a propósito.</div>
           </div>
           <footer class="folio"><span class="fnum">24</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="12" data-side="left" data-page="25" data-section="Conclusiones" aria-label="Conclusiones, página 25">
+      <section class="page explain" data-spread="12" data-side="left" data-page="25" data-section="Conclusiones" aria-label="Conclusiones, página 25">
         <div class="page-inner">
           <header class="running"><span>25 · Conclusiones</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">11 · Conclusiones</p>
             <h1 class="h1">Conclusiones.</h1>
             <p class="lead">Local vs cloud, lo que aprendimos y lo que queda por hacer.</p>
-            <div class="note" style="margin-top:auto;">Esta sección se completará cuando estén cerrados los resultados de la batería de pruebas.</div>
+            <div class="note">Esta sección se completará cuando estén cerrados los resultados de la batería de pruebas.</div>
           </div>
           <footer class="folio"><span class="fnum">25</span><span>Revista de proyectos</span></footer>
         </div>
       </section>
 
-      <section class="page" data-spread="12" data-side="right" data-page="26" data-section="Conclusiones" aria-label="Conclusiones, página 26">
+      <section class="page evidence" data-spread="12" data-side="right" data-page="26" data-section="Conclusiones" aria-label="Conclusiones, página 26">
         <div class="page-inner">
           <header class="running"><span>26 · Conclusiones</span><span>PBD / 2026</span></header>
           <div class="page-body">
@@ -1685,7 +1563,7 @@ df.to_sql(<span class="s">"meteoritos"</span>, engine, if_exists=<span class="s"
         </div>
       </section>
 
-<section class="page closing-left" data-spread="13" data-side="left" data-page="27" data-section="Cierre" aria-label="Cierre, página 27">
+      <section class="page cover-left closing-left" data-spread="13" data-side="left" data-page="27" data-section="Cierre" aria-label="Cierre, página 27">
         <div class="page-inner">
           <header class="running"><span>27 · Cierre</span><span>PBD / 2026</span></header>
           <div class="page-body" style="justify-content:center;gap:clamp(12px,2cqw,20px);">
