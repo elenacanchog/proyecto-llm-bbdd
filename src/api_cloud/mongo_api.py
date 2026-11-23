@@ -10,6 +10,7 @@ from langchain.agents import create_agent
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 # =============================================================================
 # 1. CONFIGURACIÓN DE CREDENCIALES Y CONEXIÓN A MONGODB ATLAS
@@ -173,7 +174,7 @@ def consultar_airbnb_con_metricas(pregunta_usuario: str, modelo: str) -> dict:
 
         resultado_agente = agente.invoke(
             {"messages": [("user", pregunta_usuario)]},
-            config={"recursion_limit": 10}
+            config={"recursion_limit": 14}
         )
         mensajes = resultado_agente["messages"]
 
@@ -306,7 +307,8 @@ if __name__ == "__main__":
     MIS_MODELOS = [
         "openai/gpt-oss-120b",
         "qwen/qwen3.8-27b",
-        "openai/gpt-oss-20b"
+        "openai/gpt-oss-20b",
+        "allam-2-7b"
     ]
 
     MIS_PREGUNTAS = [
@@ -324,8 +326,8 @@ if __name__ == "__main__":
             imprimir_banner_pregunta(idx, len(MIS_PREGUNTAS), pregunta)
             resultado_metrica = consultar_airbnb_con_metricas(pregunta, modelo)
             historial_metricas.append(resultado_metrica)
-            # Pausa de 6s para evitar saturar el límite de tokens de salida por minuto en Groq
-            time.sleep(6)
+            # Pausa de 15s para evitar saturar el límite de tokens de salida por minuto en Groq
+            time.sleep(15)
 
     print("\n\n" + "★" * 80)
     print("RESUMEN COMPARATIVO DE RENDIMIENTO (MONGODB ATLAS + AGENTE API)")

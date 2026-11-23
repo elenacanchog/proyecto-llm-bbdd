@@ -9,6 +9,8 @@ from langchain.agents import create_agent
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from pathlib import Path
+
 
 # =============================================================================
 # 1. CONFIGURACIÓN DE CREDENCIALES Y CONEXIÓN A NEON (POSTGRESQL EN LA NUBE)
@@ -251,7 +253,7 @@ if __name__ == "__main__":
             imprimir_banner_pregunta(idx, len(MIS_PREGUNTAS), pregunta)
             res = consultar_meteoritos_con_metricas(pregunta, modelo)
             historial_metricas.append(res)
-            time.sleep(2)
+            time.sleep(15)
 
     print("\n\n" + "★" * 80)
     print("RESUMEN COMPARATIVO DE RENDIMIENTO (POSTGRESQL NEON + API)")
