@@ -1,6 +1,7 @@
 langchain
 langchain-groq
 langchain-core
+langchain-ollama
 pymongo
 python-dotenv
 pandas
