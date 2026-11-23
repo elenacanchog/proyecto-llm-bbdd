@@ -6,7 +6,8 @@ from sqlalchemy import create_engine, inspect, text
 from langchain_core.tools import tool
 from langchain_groq import ChatGroq
 from langchain.agents import create_agent
-from pathlib import Path
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # =============================================================================
@@ -222,8 +223,6 @@ def generar_graficos_comparativos(df: pd.DataFrame, titulo_bd: str, sufijo_archi
 
     print(f"\n📊 Gráficos guardados en:\n   - {ruta_tiempo}\n   - {ruta_tokens}")
 
-    # Abre ambos gráficos en ventanas interactivas al finalizar
-    plt.show()
     plt.close("all")
 
 # =============================================================================
