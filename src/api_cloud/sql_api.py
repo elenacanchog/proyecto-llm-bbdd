@@ -6,6 +6,8 @@ from sqlalchemy import create_engine, inspect, text
 from langchain_core.tools import tool
 from langchain_groq import ChatGroq
 from langchain.agents import create_agent
+from pathlib import Path
+import matplotlib.pyplot as plt
 
 # =============================================================================
 # 1. CONFIGURACIÓN DE CREDENCIALES Y CONEXIÓN A NEON (POSTGRESQL EN LA NUBE)
@@ -147,7 +149,85 @@ def consultar_meteoritos_con_metricas(pregunta_usuario: str, modelo: str) -> dic
     return metricas
 
 # =============================================================================
-# 5. BATERÍA DE EVALUACIÓN COMPARATIVA
+# 5. FUNCIÓN PARA GENERAR Y GUARDAR GRÁFICOS COMPARATIVOS
+# =============================================================================
+
+def generar_graficos_comparativos(df: pd.DataFrame, titulo_bd: str, sufijo_archivo: str):
+    """Genera, guarda por separado y muestra en ventana los gráficos de tiempo y tokens."""
+    ruta_raiz = Path(__file__).resolve().parents[2]
+    carpeta_graficos = ruta_raiz / "graficos"
+    carpeta_graficos.mkdir(exist_ok=True)
+
+    df_plot = df.copy()
+    df_plot["Num_P"] = "P" + (df_plot.groupby("Modelo").cumcount() + 1).astype(str)
+    df_plot["Modelo_Corto"] = df_plot["Modelo"].str.split("/").str[-1]
+
+    modelos = df_plot["Modelo_Corto"].unique()
+    preguntas = df_plot["Num_P"].unique()
+    x = range(len(preguntas))
+    ancho = 0.8 / max(len(modelos), 1)
+    colores = ["#6366f1", "#10b981", "#f59e0b", "#ef4444"]
+
+    # -------------------------------------------------------------------------
+    # GRÁFICO 1: TIEMPO DE EJECUCIÓN (SEGUNDOS)
+    # -------------------------------------------------------------------------
+    fig_tiempo, ax1 = plt.subplots(figsize=(8.5, 5))
+    for idx, mod in enumerate(modelos):
+        sub = df_plot[df_plot["Modelo_Corto"] == mod]
+        desplazamiento = [i + (idx - len(modelos) / 2 + 0.5) * ancho for i in x]
+        barras = ax1.bar(desplazamiento, sub["Tiempo_Total (s)"], width=ancho, label=mod, color=colores[idx % len(colores)])
+        for barra, ok in zip(barras, sub["Exito_Consulta"]):
+            alto = barra.get_height()
+            etiqueta = f"{alto:.1f}s" if ok else "Error"
+            ax1.text(barra.get_x() + barra.get_width() / 2, alto, etiqueta,
+                     ha="center", va="bottom", fontsize=8.5, fontweight="bold")
+
+    ax1.set_title(f"Tiempo de Ejecución por Consulta ({titulo_bd})", fontweight="bold")
+    ax1.set_ylabel("Tiempo Total (segundos)")
+    ax1.set_xticks(list(x))
+    ax1.set_xticklabels(preguntas)
+    ax1.margins(y=0.15)
+    ax1.grid(axis="y", linestyle="--", alpha=0.4)
+    ax1.legend()
+    plt.tight_layout()
+
+    ruta_tiempo = carpeta_graficos / f"comparativa_tiempo_{sufijo_archivo}.png"
+    fig_tiempo.savefig(ruta_tiempo, dpi=300, bbox_inches="tight")
+
+    # -------------------------------------------------------------------------
+    # GRÁFICO 2: CONSUMO DE TOKENS
+    # -------------------------------------------------------------------------
+    fig_tokens, ax2 = plt.subplots(figsize=(8.5, 5))
+    for idx, mod in enumerate(modelos):
+        sub = df_plot[df_plot["Modelo_Corto"] == mod]
+        desplazamiento = [i + (idx - len(modelos) / 2 + 0.5) * ancho for i in x]
+        barras = ax2.bar(desplazamiento, sub["Tokens_Totales"], width=ancho, label=mod, color=colores[idx % len(colores)])
+        for barra, ok in zip(barras, sub["Exito_Consulta"]):
+            alto = barra.get_height()
+            etiqueta = f"{int(alto):,}" if ok else "0"
+            ax2.text(barra.get_x() + barra.get_width() / 2, alto, etiqueta,
+                     ha="center", va="bottom", fontsize=8.5, fontweight="bold")
+
+    ax2.set_title(f"Consumo de Tokens por Consulta ({titulo_bd})", fontweight="bold")
+    ax2.set_ylabel("Tokens Totales")
+    ax2.set_xticks(list(x))
+    ax2.set_xticklabels(preguntas)
+    ax2.margins(y=0.15)
+    ax2.grid(axis="y", linestyle="--", alpha=0.4)
+    ax2.legend()
+    plt.tight_layout()
+
+    ruta_tokens = carpeta_graficos / f"comparativa_tokens_{sufijo_archivo}.png"
+    fig_tokens.savefig(ruta_tokens, dpi=300, bbox_inches="tight")
+
+    print(f"\n📊 Gráficos guardados en:\n   - {ruta_tiempo}\n   - {ruta_tokens}")
+
+    # Abre ambos gráficos en ventanas interactivas al finalizar
+    plt.show()
+    plt.close("all")
+
+# =============================================================================
+# 6. BATERÍA DE EVALUACIÓN COMPARATIVA
 # =============================================================================
 if __name__ == "__main__":
     MIS_MODELOS = [
@@ -179,3 +259,5 @@ if __name__ == "__main__":
     print("★" * 80)
     df_resultados = pd.DataFrame(historial_metricas)
     print(df_resultados.to_string(index=False))
+
+    generar_graficos_comparativos(df_resultados, "PostgreSQL Neon - API", "sql_api")
