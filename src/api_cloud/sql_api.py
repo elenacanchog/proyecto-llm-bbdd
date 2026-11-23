@@ -153,7 +153,8 @@ if __name__ == "__main__":
     MIS_MODELOS = [
         "openai/gpt-oss-120b",
         "qwen/qwen3.8-27b",
-        "openai/gpt-oss-20b"
+        "openai/gpt-oss-20b",
+        "allam-2-7b"
     ]
 
     MIS_PREGUNTAS = [

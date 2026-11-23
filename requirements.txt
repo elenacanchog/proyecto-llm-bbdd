@@ -9,3 +9,4 @@ dnspython
 sqlalchemy
 psycopg2-binary
 streamlit
+mongomock

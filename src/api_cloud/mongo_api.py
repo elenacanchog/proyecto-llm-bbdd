@@ -1,6 +1,5 @@
 import os
 import time
-from typing import Any
 import pandas as pd
 from bson import json_util
 from dotenv import load_dotenv
@@ -21,9 +20,6 @@ if not MONGO_URI:
 cliente = MongoClient(MONGO_URI)
 mongo_db = cliente["sample_airbnb"]
 
-# Campos de texto muy largo, listas de reseñas o URLs que excluimos por defecto
-# para no saturar la ventana de contexto ni disparar el consumo de tokens.
-# Mantenemos visibles host.host_name y host.host_is_superhost para poder filtrar por ellos.
 CAMPOS_PESADOS = {
     "_id": 0,
     "reviews": 0,
@@ -46,17 +42,17 @@ Eres un agente experto en bases de datos MongoDB.
 Responde siempre en español de forma clara y directa usando exclusivamente los datos obtenidos de la base de datos.
 
 Reglas obligatorias:
-1. Llama SIEMPRE primero a get_mongo_schema para ver qué colecciones existen y los nombres exactos de sus campos (ej. "address.market", "property_type", "amenities", "host.host_is_superhost").
+1. Llama SIEMPRE primero a get_mongo_schema para ver qué colecciones existen y los nombres exactos de sus campos.
 2. Los valores de texto en la base de datos están en inglés: traduce los filtros del usuario al inglés (ej. "Spain", "Apartment", "Wifi", "Air conditioning").
-3. Para filtrar, ordenar, limitar resultados (Top N) o calcular medias/agrupaciones, usa operacion='aggregate' pasando en consulta_json una LISTA JSON de etapas: [{"$match": ...}, {"$sort": ...}, {"$limit": 5}].
-4. Si incluyes una etapa "$project", proyecta siempre los campos usados en "$match" y subcampos concretos (ej. "host.host_name": 1) en lugar de objetos enteros.
-5. Si una consulta devuelve "No se encontraron documentos" o hay un error de sintaxis, revisa el esquema y reintenta corrigiendo la consulta.
+3. Para filtrar, ordenar, limitar resultados o calcular medias/agrupaciones, usa operacion='aggregate' pasando en consulta_json un string con una LISTA JSON de etapas: '[{"$match": ...}, {"$sort": ...}, {"$limit": 5}]'.
+4. Si incluyes "$project", proyecta siempre los campos usados en "$match" y subcampos concretos (ej. "host.host_name": 1).
+5. Si una consulta no devuelve resultados o hay un error de sintaxis, revisa el esquema y reintenta corrigiendo la consulta.
 """
 
 # =============================================================================
 # 2. UTILIDADES DE INSPECCIÓN DE ESQUEMA Y HERRAMIENTAS DEL AGENTE
 # =============================================================================
-def resumir_valor(valor: Any, nivel: int = 0) -> Any:
+def resumir_valor(valor, nivel: int = 0):
     """Recorta textos y arrays largos de un documento de muestra para mostrar un esquema compacto."""
     if isinstance(valor, dict):
         if nivel >= 2:
@@ -65,17 +61,17 @@ def resumir_valor(valor: Any, nivel: int = 0) -> Any:
     if isinstance(valor, list):
         if not valor:
             return []
-        muestra = [resumir_valor(x, nivel + 1) for x in valor[:5]]
-        if len(valor) > 5:
-            muestra.append(f"... (+{len(valor) - 5} elementos)")
+        muestra = [resumir_valor(x, nivel + 1) for x in valor[:12]]
+        if len(valor) > 12:
+            muestra.append(f"... (+{len(valor) - 12})")
         return muestra
-    if isinstance(valor, str) and len(valor) > 40:
-        return valor[:40] + "..."
+    if isinstance(valor, str) and len(valor) > 35:
+        return valor[:35] + "..."
     return valor
 
 @tool
 def get_mongo_schema() -> str:
-    """Devuelve las colecciones disponibles en MongoDB y un documento de ejemplo resumido con sus campos."""
+    """Devuelve las colecciones disponibles en MongoDB y un documento de ejemplo compacto con sus campos."""
     colecciones = mongo_db.list_collection_names()
     if not colecciones:
         return "No hay colecciones en esta base de datos."
@@ -84,41 +80,33 @@ def get_mongo_schema() -> str:
     for nombre_col in colecciones:
         doc = mongo_db[nombre_col].find_one({}, CAMPOS_PESADOS)
         resumen = resumir_valor(doc) if doc else {}
+        # Sin indent=2 para ahorrar cientos de tokens de espacios en blanco
         resultado.append(
-            f"Colección '{nombre_col}' | Estructura y ejemplo de campos:\n"
-            + json_util.dumps(resumen, indent=2, ensure_ascii=False)
+            f"Colección '{nombre_col}': "
+            + json_util.dumps(resumen, ensure_ascii=False)
         )
-    return "\n\n".join(resultado)
+    return "\n".join(resultado)
 
 @tool
-def run_mongo(
-    coleccion: str,
-    operacion: str,
-    consulta_json: Any = "{}",
-    datos_json: Any = "{}"
-) -> str:
+def run_mongo(coleccion: str, operacion: str, consulta_json: str = "{}") -> str:
     """
-    Ejecuta una operación en MongoDB Atlas sobre una colección.
+    Ejecuta una consulta de lectura en MongoDB Atlas sobre una colección.
     - coleccion: nombre de la colección (ej. 'listingsAndReviews').
-    - operacion: 'find', 'aggregate', 'count', 'insert_one', 'update_many' o 'delete_many'.
-    - consulta_json: filtro JSON (en find/count/update/delete) o lista JSON de etapas (en aggregate).
-    - datos_json: documento a insertar o cambios ($set) para update_many.
+    - operacion: 'find', 'aggregate' o 'count'.
+    - consulta_json: string JSON con el filtro (en find/count) o lista JSON de etapas (en aggregate).
     """
     try:
         col = mongo_db[coleccion]
         consulta = json_util.loads(consulta_json) if isinstance(consulta_json, str) else consulta_json
-        datos = json_util.loads(datos_json) if isinstance(datos_json, str) else datos_json
 
         if operacion == "find":
             filas = list(col.find(consulta, CAMPOS_PESADOS).limit(5))
             return json_util.dumps(filas, ensure_ascii=False) if filas else "No se encontraron documentos."
 
         elif operacion == "aggregate":
-            # Si el LLM envía un diccionario suelto en vez de una lista de etapas, lo convertimos
             if isinstance(consulta, dict):
                 consulta = [{k: v} for k, v in consulta.items()]
 
-            # Si no hay etapa de proyección ni agrupación, excluimos campos pesados automáticamente
             tiene_proyeccion_o_grupo = any(
                 any(k in etapa for k in ("$project", "$group", "$count"))
                 for etapa in consulta if isinstance(etapa, dict)
@@ -131,20 +119,8 @@ def run_mongo(
         elif operacion == "count":
             return f"Total de documentos: {col.count_documents(consulta)}"
 
-        elif operacion == "insert_one":
-            res = col.insert_one(datos)
-            return f"Documento insertado con ID: {res.inserted_id}"
-
-        elif operacion == "update_many":
-            res = col.update_many(consulta, datos)
-            return f"Documentos actualizados: {res.modified_count}"
-
-        elif operacion == "delete_many":
-            res = col.delete_many(consulta)
-            return f"Documentos eliminados: {res.deleted_count}"
-
         else:
-            return "Operación no válida. Usa: find, aggregate, count, insert_one, update_many o delete_many."
+            return "Operación no válida. Usa únicamente: 'find', 'aggregate' o 'count'."
 
     except Exception as e:
         return f"Error MongoDB: {e}"
@@ -170,10 +146,6 @@ def imprimir_banner_pregunta(numero: int, total: int, pregunta: str):
 # 4. MOTOR PRINCIPAL DEL AGENTE TEXT-TO-NOSQL CON TELEMETRÍA
 # =============================================================================
 def consultar_airbnb_con_metricas(pregunta_usuario: str, modelo: str) -> dict:
-    """
-    Ejecuta el Agente MongoDB usando el modelo de Groq indicado, extrae la consulta
-    generada, los datos recuperados y devuelve un diccionario con las métricas.
-    """
     inicio_total = time.time()
 
     metricas = {
@@ -187,7 +159,8 @@ def consultar_airbnb_con_metricas(pregunta_usuario: str, modelo: str) -> dict:
     }
 
     try:
-        llm = ChatGroq(model=modelo, temperature=0)
+        # max_tokens=800 evita que Groq rechace modelos con límite OTPM de 1000 (como Qwen)
+        llm = ChatGroq(model=modelo, temperature=0, max_tokens=800)
 
         agente = create_agent(
             model=llm,
@@ -195,7 +168,6 @@ def consultar_airbnb_con_metricas(pregunta_usuario: str, modelo: str) -> dict:
             system_prompt=SYSTEM_PROMPT,
         )
 
-        # recursion_limit=10 evita bucles infinitos si un modelo entra en reintentos continuos
         resultado_agente = agente.invoke(
             {"messages": [("user", pregunta_usuario)]},
             config={"recursion_limit": 10}
@@ -259,13 +231,8 @@ if __name__ == "__main__":
     ]
 
     MIS_PREGUNTAS = [
-        # Nivel 1: Filtrado en arrays ($all) y ordenación ($sort)
         "Dime 3 apartamentos en Barcelona que tengan Wifi y aire acondicionado, ordenados del más barato al más caro.",
-        
-        # Nivel 2: Navegación por subdocumentos anidados y comparadores numéricos ($gte, $gt)
         "Dime 3 alojamientos en España donde el anfitrión sea Superhost, tengan capacidad para al menos 4 personas y una puntuación global superior a 95.",
-        
-        # Nivel 3: Pipeline de agregación estadística ($group y $avg)
         "¿Cuál es el precio medio por noche de los alojamientos en Barcelona según el tipo de propiedad (property_type)? Ordénalo de más caro a más barato."
     ]
 
@@ -278,7 +245,8 @@ if __name__ == "__main__":
             imprimir_banner_pregunta(idx, len(MIS_PREGUNTAS), pregunta)
             resultado_metrica = consultar_airbnb_con_metricas(pregunta, modelo)
             historial_metricas.append(resultado_metrica)
-            time.sleep(2)
+            # Pausa de 6s para evitar saturar el límite de tokens de salida por minuto en Groq
+            time.sleep(6)
 
     print("\n\n" + "★" * 80)
     print("RESUMEN COMPARATIVO DE RENDIMIENTO (MONGODB ATLAS + AGENTE API)")

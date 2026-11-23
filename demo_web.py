@@ -58,9 +58,9 @@ def resumir_valor(valor: Any, nivel: int = 0) -> Any:
     if isinstance(valor, list):
         if not valor:
             return []
-        muestra = [resumir_valor(x, nivel + 1) for x in valor[:5]]
-        if len(valor) > 5:
-            muestra.append(f"... (+{len(valor) - 5} elementos)")
+        muestra = [resumir_valor(x, nivel + 1) for x in valor[:12]]
+        if len(valor) > 12:
+            muestra.append(f"... (+{len(valor) - 12} elementos)")
         return muestra
     if isinstance(valor, str) and len(valor) > 40:
         return valor[:40] + "..."
@@ -99,26 +99,19 @@ def crear_herramientas_mongo(uri_mongo: str = None, es_local: bool = False, db_p
         return "\n\n".join(resultado)
 
     @tool
-    def run_mongo(
-        coleccion: str,
-        operacion: str,
-        consulta_json: Any = "{}",
-        datos_json: Any = "{}"
-    ) -> str:
+    def run_mongo(coleccion: str, operacion: str, consulta_json: str = "{}") -> str:
         """
-        Ejecuta una operación en MongoDB sobre una colección.
+        Ejecuta una consulta de lectura en MongoDB sobre una colección.
         - coleccion: nombre de la colección (ej. 'listingsAndReviews' o 'coleccion_json').
-        - operacion: 'find', 'aggregate', 'count', 'insert_one', 'update_many' o 'delete_many'.
-        - consulta_json: filtro JSON (en find/count/update/delete) o lista JSON de etapas (en aggregate).
-        - datos_json: documento a insertar o cambios ($set) para update_many.
+        - operacion: 'find', 'aggregate' o 'count'.
+        - consulta_json: string JSON con el filtro (en find/count) o lista JSON de etapas (en aggregate).
         """
         try:
             col = mongo_db[coleccion]
             consulta = json_util.loads(consulta_json) if isinstance(consulta_json, str) else consulta_json
-            datos = json_util.loads(datos_json) if isinstance(datos_json, str) else datos_json
 
             if operacion == "find":
-                filas = list(col.find(consulta, campos_excluir).limit(5))
+                filas = list(col.find(consulta, campos_excluir).limit(12))
                 return json_util.dumps(filas, indent=2, ensure_ascii=False) if filas else "No se encontraron documentos."
 
             elif operacion == "aggregate":
@@ -135,19 +128,7 @@ def crear_herramientas_mongo(uri_mongo: str = None, es_local: bool = False, db_p
             elif operacion == "count":
                 return f"Total de documentos: {col.count_documents(consulta)}"
 
-            elif operacion == "insert_one":
-                res = col.insert_one(datos)
-                return f"Documento insertado con ID: {res.inserted_id}"
-
-            elif operacion == "update_many":
-                res = col.update_many(consulta, datos)
-                return f"Documentos actualizados: {res.modified_count}"
-
-            elif operacion == "delete_many":
-                res = col.delete_many(consulta)
-                return f"Documentos eliminados: {res.deleted_count}"
-
-            return "Operación no válida."
+            return "Operación no válida. Usa únicamente: 'find', 'aggregate' o 'count'."
         except Exception as e:
             return f"Error MongoDB: {e}"
 
@@ -188,7 +169,7 @@ def crear_herramientas_sql(uri_postgres: str = None, engine_personalizado=None):
 def obtener_llm(entorno: str, modelo: str):
     """Instancia el modelo LLM en la nube (Groq) o en local (Ollama)."""
     if entorno == "API en la Nube (Groq)":
-        return ChatGroq(model=modelo, temperature=0)
+        return ChatGroq(model=modelo, temperature=0, max_tokens=800)
     else:
         try:
             from langchain_ollama import ChatOllama
