@@ -1,15 +1,19 @@
+import os
 import threading
 import time
 from typing import Any
+from dotenv import load_dotenv
 from pymongo import MongoClient
 from bson import json_util
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
 
+load_dotenv()
+
 # 1. CONFIGURACIÓN INICIAL
-URI_MONGO = "mongodb://localhost:27017/"
-NOMBRE_BD = "sampl_airbnb"
+URI_MONGO = os.getenv("LOCAL_MONGO_URI")
+NOMBRE_BD = os.getenv("LOCAL_MONGO_DB")
 MODELOS_A_PROBAR = ["qwen3.5:4b", "gemma-4:latest"]
 
 cliente = MongoClient(URI_MONGO)

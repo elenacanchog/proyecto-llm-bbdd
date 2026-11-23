@@ -1,12 +1,16 @@
+import os
 import threading
 import time
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, inspect, text
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
 
+load_dotenv()
+
 # 1. CONFIGURACIÓN INICIAL
-URI_BD = "postgresql+psycopg2://postgres:12345@localhost:5432/nasa_meteoritos"
+URI_BD = os.getenv("LOCAL_POSTGRES_URI")
 MODELOS_A_PROBAR = ["qwen3.5:4b", "gemma-4:latest"]
 
 engine = create_engine(URI_BD)

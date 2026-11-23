@@ -27,8 +27,9 @@ load_dotenv()
 CLOUD_MONGO_URI = os.getenv("MONGODB_URI")
 CLOUD_POSTGRES_URI = os.getenv("POSTGRES_URI")
 
-LOCAL_MONGO_URI = "mongodb://localhost:27017/"
-LOCAL_POSTGRES_URI = "postgresql+psycopg2://postgres:12345@localhost:5432/nasa_meteoritos"
+LOCAL_MONGO_URI = os.getenv("LOCAL_MONGO_URI")
+LOCAL_MONGO_DB = os.getenv("LOCAL_MONGO_DB")
+LOCAL_POSTGRES_URI = os.getenv("LOCAL_POSTGRES_URI")
 
 CAMPOS_PESADOS_MONGO = {
     "_id": 0,
@@ -105,8 +106,8 @@ def crear_herramientas_mongo(uri_mongo: str = None, es_local: bool = False, db_p
         campos_excluir = {"_id": 0}
     else:
         cliente = MongoClient(uri_mongo)
-        if es_local and "sampl_airbnb" in cliente.list_database_names():
-            mongo_db = cliente["sampl_airbnb"]
+        if es_local and LOCAL_MONGO_DB:
+            mongo_db = cliente[LOCAL_MONGO_DB]
         else:
             mongo_db = cliente["sample_airbnb"]
         campos_excluir = CAMPOS_PESADOS_MONGO
@@ -707,7 +708,8 @@ Reglas obligatorias:
                     es_mongo = True
                     uri = LOCAL_MONGO_URI if es_local else CLOUD_MONGO_URI
                     if not uri:
-                        raise ValueError("Falta la variable MONGODB_URI en el archivo .env")
+                        var_faltante = "LOCAL_MONGO_URI" if es_local else "MONGODB_URI"
+                        raise ValueError(f"Falta la variable {var_faltante} en el archivo .env")
                     herramientas = crear_herramientas_mongo(uri_mongo=uri, es_local=es_local)
                     nombre_tool_ejecucion = "run_mongo"
                     lenguaje_codigo = "json"
@@ -724,7 +726,8 @@ Reglas obligatorias:
                     es_mongo = False
                     uri = LOCAL_POSTGRES_URI if es_local else CLOUD_POSTGRES_URI
                     if not uri:
-                        raise ValueError("Falta la variable POSTGRES_URI en el archivo .env")
+                        var_faltante = "LOCAL_POSTGRES_URI" if es_local else "POSTGRES_URI"
+                        raise ValueError(f"Falta la variable {var_faltante} en el archivo .env")
                     herramientas = crear_herramientas_sql(uri_postgres=uri)
                     nombre_tool_ejecucion = "run_sql"
                     lenguaje_codigo = "sql"
