@@ -11,13 +11,15 @@ from sqlalchemy import create_engine, inspect, text
 from langchain_core.tools import tool
 from langchain_groq import ChatGroq
 from langchain.agents import create_agent
+import base64
+from pathlib import Path
 
 # =============================================================================
 # 1. CONFIGURACIÓN DE PÁGINA Y CREDENCIALES
 # =============================================================================
 st.set_page_config(
-    page_title="DataChat · Consulta de BBDD con LLMs",
-    page_icon="🗄️",
+    page_title="AgenteSQL - Acceso a bases de datos desde LLMs",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -308,8 +310,19 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 .step-hint { font-size: .82rem; opacity: .65; margin: -.25rem 0 .6rem 2.35rem; }
 
 .section-title {
-    font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     margin: .2rem 0 .8rem 0;
+}
+.icono-inline {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    vertical-align: middle;
 }
 
 /* ---- Pills de Streamlit ---- */
@@ -384,7 +397,7 @@ div[data-testid="stFileUploader"] section {
 }
 
 /* ---- Chips de estado ---- */
-.chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .4rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .4rem; margin-bottom: .6rem; }
 .chip {
     display: inline-flex; align-items: center; gap: .35rem;
     padding: .25rem .7rem;
@@ -445,6 +458,18 @@ button[data-baseweb="tab"] { font-weight: 600; }
 """
 st.markdown(CSS, unsafe_allow_html=True)
 
+@st.cache_data
+def icono_html(nombre_archivo: str, tamano: int = 24) -> str:
+    ruta = Path(__file__).parent / "icons" / nombre_archivo
+    if not ruta.exists():
+        return ""
+    extension = ruta.suffix.lower()
+    mime = "image/svg+xml" if extension == ".svg" else "image/png"
+    codificado = base64.b64encode(ruta.read_bytes()).decode("utf-8")
+    return (
+        f'<img src="data:{mime};base64,{codificado}" '
+        f'style="width:{tamano}px; height:{tamano}px; object-fit:contain; vertical-align:middle;" />'
+    )
 
 def paso(numero: int, titulo: str, ayuda: str = "") -> None:
     st.markdown(
@@ -486,14 +511,14 @@ if "historial" not in st.session_state:
 st.markdown(
     """
     <div class="hero">
-        <h1>🗄️ DataChat · Consulta de Bases de Datos con IA</h1>
+        <h1>AgenteSQL - Acceso a bases de datos desde LLMs</h1>
         <p>Haz preguntas en lenguaje natural y deja que un agente inteligente consulte
         la base de datos por ti: SQL, MongoDB o tus propios archivos.</p>
         <div class="hero-badges">
-            <span class="hero-badge">☁️ API en la nube o 🖥️ Local</span>
-            <span class="hero-badge">🍃 MongoDB</span>
-            <span class="hero-badge">🐘 PostgreSQL</span>
-            <span class="hero-badge">📄 CSV / JSON propios</span>
+            <span class="hero-badge">API en la nube o Local</span>
+            <span class="hero-badge">MongoDB</span>
+            <span class="hero-badge">PostgreSQL</span>
+            <span class="hero-badge">CSV / JSON propios</span>
         </div>
     </div>
     """,
@@ -505,7 +530,10 @@ col_config, col_consulta = st.columns([1, 1.45], gap="large")
 # ------------------------- COLUMNA IZQUIERDA: CONFIGURACIÓN -------------------------
 with col_config:
     with st.container(border=True):
-        st.markdown('<div class="section-title">⚙️ Configuración</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="section-title">{icono_html("settings.svg", 22)} Configuración</div>',
+            unsafe_allow_html=True,
+        )
 
         paso(1, "Entorno de ejecución", "¿Dónde se ejecuta el modelo de lenguaje?")
         entorno = st.pills(
@@ -520,9 +548,9 @@ with col_config:
         
         if entorno == OPT_LOCAL:
             st.info(
-                "🖥️ **Modo Local:** Solo funciona si ejecutas `demo_web.py` en tu propio ordenador "
+                "**Modo Local:** solo funciona si ejecutas `demo_web.py` en tu propio ordenador "
                 "con Ollama, MongoDB y PostgreSQL activos. En la versión web pública usa **API en la Nube (Groq)**.\n\n"
-                f"📖 [Ver guía de instalación y requisitos en GitHub]({REPO_GITHUB_URL})"
+                f"[Ver guía de instalación y requisitos en GitHub]({REPO_GITHUB_URL})"
             )
 
         st.write("")
@@ -548,14 +576,14 @@ with col_config:
                 tipo_motor = "SQL (SQLite)" if archivo_subido.name.lower().endswith(".csv") else "NoSQL (MongoDB simulado)"
                 st.markdown(
                     '<div class="chips">'
-                    + chip(f"📎 {archivo_subido.name}", "info")
+                    + chip(f"{archivo_subido.name}", "info")
                     + chip(f"{tam_kb:,.1f} KB")
                     + chip(tipo_motor, "ok")
                     + "</div>",
                     unsafe_allow_html=True,
                 )
                 if archivo_subido.name.lower().endswith(".csv"):
-                    with st.expander("👁️ Vista previa del archivo"):
+                    with st.expander("Vista previa del archivo"):
                         try:
                             vista = pd.read_csv(archivo_subido, sep=None, engine="python", nrows=5)
                             st.dataframe(vista, use_container_width=True, hide_index=True)
@@ -583,7 +611,7 @@ with col_config:
 
         # Estado de las credenciales / conexión
         st.write("")
-        chips_estado = [chip(f"🤖 {modelo}", "info")]
+        chips_estado = [chip(f" {modelo}", "info")]
         if entorno == OPT_NUBE:
             chips_estado.append(
                 chip("Groq API key ✓", "ok") if os.getenv("GROQ_API_KEY") else chip("Falta GROQ_API_KEY", "warn")
@@ -606,7 +634,7 @@ else:
 
 with col_consulta:
     with st.container(border=True):
-        st.markdown('<div class="section-title">💬 Tu consulta</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">Tu consulta</div>', unsafe_allow_html=True)
         paso(4, "Escribe tu pregunta en español", "Describe lo que quieres saber; el agente generará la consulta por ti.")
 
         pregunta = st.text_area(
@@ -617,7 +645,7 @@ with col_consulta:
             label_visibility="collapsed",
         )
 
-        st.markdown("<div class='step-hint' style='margin-left:0'>💡 Prueba con un ejemplo:</div>", unsafe_allow_html=True)
+        st.markdown("<div class='step-hint' style='margin-left:0'>Prueba con un ejemplo:</div>", unsafe_allow_html=True)
         for i, ej in enumerate(EJEMPLOS[base_datos]):
             st.button(
                 ej,
@@ -628,16 +656,16 @@ with col_consulta:
             )
 
         st.write("")
-        boton_consultar = st.button("🚀 Ejecutar Consulta", type="primary", use_container_width=True)
+        boton_consultar = st.button(" Ejecutar Consulta", type="primary", use_container_width=True)
 
 # =============================================================================
 # 5. EJECUCIÓN DEL AGENTE
 # =============================================================================
 if boton_consultar:
     if not pregunta.strip():
-        st.warning("⚠️ Por favor, escribe una pregunta antes de pulsar el botón.")
+        st.warning("Por favor, escribe una pregunta antes de pulsar el botón.")
     elif base_datos == OPT_ARCHIVO and archivo_subido is None:
-        st.warning("⚠️ Por favor, sube primero un archivo .csv o .json antes de ejecutar la consulta.")
+        st.warning("Por favor, sube primero un archivo .csv o .json antes de ejecutar la consulta.")
     else:
         es_local = (entorno == OPT_LOCAL)
 
@@ -825,37 +853,52 @@ res = st.session_state["resultado"]
 
 if res is not None:
     st.write("")
-    st.markdown('<div class="section-title">📊 Resultados</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Resultados</div>', unsafe_allow_html=True)
 
     if not res["ok"]:
-        st.error(f"❌ Error durante la ejecución: {res['error']}")
+        st.error(f"Error durante la ejecución: {res['error']}")
     else:
         m1, m2, m3 = st.columns(3)
-        m1.markdown(tarjeta_metrica("🔄", "Consultas a BD", res["intentos"]), unsafe_allow_html=True)
-        m2.markdown(tarjeta_metrica("⏱️", "Tiempo total", f"{res['tiempo']} s"), unsafe_allow_html=True)
-        m3.markdown(tarjeta_metrica("🪙", "Tokens consumidos", f"{res['tokens']:,}"), unsafe_allow_html=True)
+        m1.markdown(
+            tarjeta_metrica(icono_html("entrevista.png", 26), "Consultas a BD", res["intentos"]),
+            unsafe_allow_html=True,
+        )
+        m2.markdown(
+            tarjeta_metrica(icono_html("clock.svg", 26), "Tiempo total", f"{res['tiempo']} s"),
+            unsafe_allow_html=True,
+        )
+        m3.markdown(
+            tarjeta_metrica(icono_html("token-no-fungible.png", 26), "Tokens consumidos", f"{res['tokens']:,}"),
+            unsafe_allow_html=True,
+        )
 
         st.write("")
         col_izq, col_der = st.columns([1.2, 1], gap="large")
 
         with col_izq:
             with st.container(border=True):
-                st.subheader("💬 Respuesta del Asistente")
-                st.caption(f"❓ {res['pregunta']}")
+                st.markdown(
+                    f'<div class="section-title">{icono_html("asistente-de-robot.png", 28)} Respuesta del asistente</div>',
+                    unsafe_allow_html=True,
+                )
+                st.caption(f"{res['pregunta']}")
                 st.markdown(res["respuesta"])
 
         with col_der:
             with st.container(border=True):
-                st.subheader("⚙️ Consulta Generada")
+                st.markdown(
+                    f'<div class="section-title">{icono_html("settings.svg", 22)} Consulta generada</div>',
+                    unsafe_allow_html=True,
+                )
                 st.code(res["consulta"], language=res["lenguaje"])
 
-                with st.expander("📦 Ver datos crudos devueltos por la BD"):
+                with st.expander("Ver datos crudos devueltos por la BD"):
                     st.code(res["datos"], language=res["lenguaje"])
 
 # Historial de la sesión
 if st.session_state["historial"]:
     st.write("")
-    with st.expander(f"🕘 Historial de consultas de esta sesión ({len(st.session_state['historial'])})"):
+    with st.expander(f"Historial de consultas de esta sesión ({len(st.session_state['historial'])})"):
         for item in st.session_state["historial"]:
             st.markdown(f"**{item['pregunta']}**")
             st.caption(f"{item['base_datos']} · {item['modelo']} · {item['tiempo']} s")
@@ -863,7 +906,7 @@ if st.session_state["historial"]:
             st.divider()
 
 st.markdown(
-    f'<div class="footer">DataChat · Agentes LLM sobre MongoDB, PostgreSQL y archivos propios · '
+    f'<div class="footer">Agente LLM sobre MongoDB, PostgreSQL y archivos propios · '
     f'<a href="{REPO_GITHUB_URL}" target="_blank" style="color: inherit; text-decoration: underline;">'
     f'Código fuente y guía en GitHub</a></div>',
     unsafe_allow_html=True,
