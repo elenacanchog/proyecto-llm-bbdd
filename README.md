@@ -1,4 +1,4 @@
-# 🗄️ DataChat · Consulta de Bases de Datos mediante Agentes Autónomos y LLMs
+# AgenteSQL - Acceso a bases de datos desde LLMs
 
 > **Asignatura:** Programación de Bases de Datos (PBD)  
 > **Repositorio:** [github.com/elenacanchog/proyecto-llm-bbdd](https://github.com/elenacanchog/proyecto-llm-bbdd)
@@ -9,9 +9,9 @@ El proyecto aborda uno de los retos principales de la integración entre Modelos
 
 ---
 
-## 🧠 ¿Cómo funciona el sistema por dentro?
+## ¿Cómo funciona el sistema por dentro?
 
-A diferencia de los enfoques tradicionales de *Text-to-SQL* (donde se le pasa un esquema estático al modelo en un único *prompt* y se cruza los dedos para que acierte), este proyecto implementa **Agentes ReAct (Razonamiento + Acción)** mediante **LangChain**.
+A diferencia de los enfoques tradicionales de *Text-to-SQL* (donde se le pasa un esquema estático al modelo en un único *prompt*), este proyecto implementa **Agentes ReAct (Razonamiento + Acción)** mediante **LangChain**.
 
 Cuando el usuario formula una pregunta en español, el agente sigue un ciclo autónomo de decisión:
 
@@ -37,36 +37,36 @@ Pregunta en español
 ```
 
 ### Optimizaciones técnicas implementadas
-* **Compactación inteligente de esquemas NoSQL (`resumir_valor`):** Los documentos de MongoDB suelen tener estructuras profundamente anidadas y listas largas. Antes de entregar un documento de ejemplo al LLM, una función recursiva acorta cadenas largas y limita las muestras de arrays a 12 elementos, garantizando que el modelo vea todos los campos reales sin desbordar su ventana de contexto.
-* **Proyección negativa de campos pesados:** En MongoDB Atlas se excluyen automáticamente campos textuales masivos (`reviews`, `description`, URLs de imágenes, etc.) para evitar saturar el límite de tokens por minuto de las APIs gratuitas.
-* **Soporte de archivos propios al vuelo (en memoria RAM):** En la aplicación web, si el usuario sube un `.csv`, el sistema levanta una base de datos **SQLite** temporal en memoria; si sube un `.json`, levanta un servidor **MongoDB** simulado en memoria mediante `mongomock`.
+* **Compactación inteligente de esquemas NoSQL (`resumir_valor`):** los documentos de MongoDB suelen tener estructuras profundamente anidadas y listas largas. Antes de entregar un documento de ejemplo al LLM, una función recursiva acorta cadenas largas y limita las muestras de arrays a 12 elementos, garantizando que el modelo vea todos los campos reales sin desbordar su ventana de contexto.
+* **Proyección negativa de campos pesados:** en MongoDB Atlas se excluyen automáticamente campos textuales masivos (`reviews`, `description`, URLs de imágenes, etc.) para evitar saturar el límite de tokens por minuto de las APIs gratuitas.
+* **Soporte de archivos propios al vuelo (en memoria RAM):** en la aplicación web, si el usuario sube un `.csv`, el sistema levanta una base de datos **SQLite** temporal en memoria; si sube un `.json`, levanta un servidor **MongoDB** simulado en memoria mediante `mongomock`.
 
 ---
 
-## ⚖️ Arquitectura Híbrida: Nube vs. Local
+## Arquitectura híbrida: nube vs. local
 
 El proyecto permite ejecutar y comparar dos paradigmas distintos de despliegue de LLMs:
 
-| Característica | ☁️ Modo API en la Nube (`api_cloud`) | 🖥️ Modo Local (`local_llm`) |
+| Característica | Modo API en la nube (`api_cloud`) | Modo local (`local_llm`) |
 | :--- | :--- | :--- |
-| **Motor de Inferencia** | **Groq Cloud API** (aceleración LPU) | **Ollama** (ejecución local en CPU/GPU propia) |
-| **Modelos Evaluados** | `openai/gpt-oss-120b`<br>`qwen/qwen3.8-27b`<br>`openai/gpt-oss-20b` | `qwen3.5:4b`<br>`gemma-4:latest` |
-| **Base de Datos SQL** | **PostgreSQL** alojado en **Neon** | **PostgreSQL** local (`localhost:5432`) |
-| **Base de Datos NoSQL** | **MongoDB Atlas** (clúster en la nube) | **MongoDB Community** local (`localhost:27017`) |
-| **Privacidad y Coste** | Muy rápido; sujeto a cuotas de tokens/minuto | 100 % privado y sin internet; depende del hardware |
-| **Modo de Evaluación** | Batería automatizada + métricas + gráficos PNG | Visualización en tiempo real (*streaming*) en consola |
+| **Motor de inferencia** | **Groq Cloud API** (aceleración LPU) | **Ollama** (ejecución local en CPU/GPU propia) |
+| **Modelos evaluados** | `openai/gpt-oss-120b`<br>`qwen/qwen3.8-27b`<br>`openai/gpt-oss-20b` | `qwen3.5:4b`<br>`gemma-4:latest` |
+| **Base de datos SQL** | **PostgreSQL** alojado en **Neon** | **PostgreSQL** local (`localhost:5432`) |
+| **Base de datos NoSQL** | **MongoDB Atlas** (clúster en la nube) | **MongoDB Community** local (`localhost:27017`) |
+| **Privacidad y coste** | Muy rápido; sujeto a cuotas de tokens/minuto | 100 % privado y sin internet; depende del hardware |
+| **Modo de evaluación** | Batería automatizada + métricas + gráficos PNG | Visualización en tiempo real (*streaming*) en consola |
 
 ### Datasets utilizados
-1. **Base de datos Relacional (`nasa_meteoritos`):** Dataset oficial de la NASA (*Meteorite Landings*) con **45.716 registros** sobre caídas de meteoritos (nombre, masa en gramos, clase, año, coordenadas). Ideal para consultas analíticas con agrupaciones, filtros numéricos y manejo de valores nulos (`NULLS LAST`).
-2. **Base de datos No Relacional (`sample_airbnb`):** Colección `listingsAndReviews` con **5.555 alojamientos turísticos** en formato JSON documental (subdocumentos de dirección, anfitrión, puntuaciones y arrays de servicios/comodidades). Ideal para evaluar *Aggregation Pipelines* (`$match`, `$unwind`, `$group`, `$sort`, `$project`).
+1. **Base de datos relacional (`nasa_meteoritos`):** *dataset* oficial de la NASA (*Meteorite Landings*) con **45.716 registros** sobre caídas de meteoritos (nombre, masa en gramos, clase, año, coordenadas). Ideal para consultas analíticas con agrupaciones, filtros numéricos y manejo de valores nulos (`NULLS LAST`).
+2. **Base de datos no relacional (`sample_airbnb`):** colección `listingsAndReviews` con **5.555 alojamientos turísticos** en formato JSON documental (subdocumentos de dirección, anfitrión, puntuaciones y *arrays* de servicios/comodidades). Ideal para evaluar *Aggregation Pipelines* (`$match`, `$unwind`, `$group`, `$sort`, `$project`).
 
 ---
 
-## 📁 Estructura del Proyecto y Explicación de Archivos
+## Estructura del proyecto y explicación de archivos
 
 ```text
 proyecto-llm-bbdd/
-├── demo_web.py                      # Aplicación web interactiva (DataChat) en Streamlit
+├── demo_web.py                      # Aplicación web interactiva en Streamlit
 ├── requirements.txt                 # Lista de dependencias Python del proyecto
 ├── .env.example                     # Plantilla pública de variables de entorno
 ├── .gitignore                       # Archivos excluidos de Git (.env, venv, datasets pesados)
@@ -93,26 +93,26 @@ proyecto-llm-bbdd/
 ### Descripción detallada de cada archivo
 
 * **Raíz del proyecto:**
-  * `demo_web.py`: Interfaz gráfica web desarrollada con **Streamlit**. Permite alternar entre Nube y Local, elegir entre MongoDB, PostgreSQL o subir archivos propios (`.csv`/`.json`), probar preguntas de ejemplo, inspeccionar la consulta exacta generada por el agente y consultar métricas de latencia y consumo de tokens.
-  * `.env.example`: Plantilla con los nombres de las variables necesarias para conectar con las APIs y bases de datos sin exponer contraseñas reales en el repositorio.
-  * `requirements.txt`: Archivo de dependencias para reproducir exactamente el entorno Python en cualquier equipo.
-* **Carpeta `src/api_cloud/` (Experimentación en la Nube):**
-  * `cargar_csv_cloud.py`: Lee `data/Meteorite_Landings.csv`, limpia los tipos de datos (convierte años y masas a formato numérico) y crea/puebla la tabla en PostgreSQL Neon.
-  * `sql_api.py` y `mongo_api.py`: Ejecutan una batería estandarizada de preguntas de dificultad creciente sobre los tres modelos de Groq. Recogen métricas de éxito, número de reintentos de autocorrección, tiempo total (s) y tokens consumidos, imprimen una tabla comparativa con `pandas` y exportan automáticamente las gráficas de barras en la carpeta `graficos/`.
-* **Carpeta `src/local_llm/` (Experimentación 100 % Local):**
-  * `cargar_csv.py` y `cargar_json.py`: Scripts de ingesta que cargan los datasets de `data/` en las instancias locales de PostgreSQL y MongoDB respectivamente.
-  * `sql_local.py` y `mongo_local.py`: Ejecutan los agentes utilizando `ChatOllama` sobre modelos locales. Incorporan un indicador visual multihilo (`Spinner`) y utilizan `agente.stream()` para mostrar paso a paso en tiempo real cómo razona el modelo y qué herramientas invoca.
+  * `demo_web.py`: interfaz gráfica web desarrollada con **Streamlit**. Permite alternar entre nube y local, elegir entre MongoDB, PostgreSQL o subir archivos propios (`.csv`/`.json`), probar preguntas de ejemplo, inspeccionar la consulta exacta generada por el agente y consultar métricas de latencia y consumo de tokens.
+  * `.env.example`: plantilla con los nombres de las variables necesarias para conectar con las APIs y bases de datos sin exponer contraseñas reales en el repositorio.
+  * `requirements.txt`: archivo de dependencias para reproducir exactamente el entorno Python en cualquier equipo.
+* **Carpeta `src/api_cloud/` (experimentación en la nube):**
+  * `cargar_csv_cloud.py`: lee `data/Meteorite_Landings.csv`, limpia los tipos de datos (convierte años y masas a formato numérico) y crea e inserta los datos de la tabla en PostgreSQL Neon.
+  * `sql_api.py` y `mongo_api.py`: ejecutan una batería estandarizada de preguntas de dificultad creciente sobre los tres modelos de Groq. Recogen métricas de éxito, número de reintentos de autocorrección, tiempo total (s) y tokens consumidos, imprimen una tabla comparativa con `pandas` y exportan automáticamente las gráficas de barras en la carpeta `graficos/`.
+* **Carpeta `src/local_llm/` (experimentación 100 % local):**
+  * `cargar_csv.py` y `cargar_json.py`: scripts de ingesta que cargan los datasets de `data/` en las instancias locales de PostgreSQL y MongoDB respectivamente.
+  * `sql_local.py` y `mongo_local.py`: ejecutan los agentes utilizando `ChatOllama` sobre modelos locales. Incorporan un indicador visual multihilo (`Spinner`) y utilizan `agente.stream()` para mostrar paso a paso en tiempo real cómo razona el modelo y qué herramientas invoca.
 
 ---
 
-## 🛠️ Guía de Instalación Paso a Paso
+## Guía de instalación paso a paso
 
 ### Requisitos previos
 * **Python 3.10 o superior** instalado en el sistema.
 * **Git** para clonar el repositorio.
-* *(Opcional, solo para el modo local)*: Tener instalados **Ollama**, **PostgreSQL** y **MongoDB Community Server**.
+* *(Opcional, solo para el modo local)*: tener instalados **Ollama**, **PostgreSQL** y **MongoDB Community Server**.
 
-### Paso 1: Clonar el repositorio y crear el entorno virtual
+### Paso 1: clonar el repositorio y crear el entorno virtual
 Abre una terminal y ejecuta los siguientes comandos:
 
 ```bash
@@ -131,16 +131,16 @@ source venv_proyectopbd/bin/activate      # En Linux / macOS
 pip install -r requirements.txt
 ```
 
-### Paso 2: Descargar los datasets originales
+### Paso 2: descargar los datasets originales
 Debido a que el archivo JSON supera el límite de tamaño permitido por GitHub (`>100 MB`), los datasets no están alojados directamente en el control de versiones.
 
 1. Descarga ambos archivos desde la carpeta compartida del proyecto:  
-   📥 **[Descargar datasets (`Meteorite_Landings.csv` y `sample_airbnb.json`)](https://unexes-my.sharepoint.com/:f:/g/personal/rrinamen_alumnos_unex_es/IgDeoFLlgqVwTLxO8F1TJMtiAT9tHBqa3mb7MWTNleMfd4E?e=AOcaHv)**
+    **[Descargar datasets (`Meteorite_Landings.csv` y `sample_airbnb.json`)](https://unexes-my.sharepoint.com/:f:/g/personal/rrinamen_alumnos_unex_es/IgDeoFLlgqVwTLxO8F1TJMtiAT9tHBqa3mb7MWTNleMfd4E?e=AOcaHv)**
 2. Coloca los dos archivos descargados directamente dentro de la carpeta **`data/`** del proyecto:
    * `data/Meteorite_Landings.csv`
    * `data/sample_airbnb.json`
 
-### Paso 3: Configurar las variables de entorno (`.env`)
+### Paso 3: configurar las variables de entorno (`.env`)
 Copia la plantilla `.env.example` para crear tu archivo privado `.env`:
 
 ```bash
@@ -168,15 +168,15 @@ LOCAL_POSTGRES_URI=postgresql+psycopg2://postgres:tu_password@localhost:5432/nas
 ```
 
 * **¿Dónde obtener las credenciales de la nube gratuitas?**
-  * `GROQ_API_KEY`: Creando una cuenta gratuita en [console.groq.com](https://console.groq.com/).
-  * `MONGODB_URI`: Creando un clúster gratuito M0 en [MongoDB Atlas](https://www.mongodb.com/atlas) y activando el dataset de ejemplo *Sample Dataset* (`sample_airbnb`).
-  * `POSTGRES_URI`: Creando un proyecto gratuito en [Neon.tech](https://neon.tech/) con una base de datos llamada `nasa_meteoritos`.
+  * `GROQ_API_KEY`: creando una cuenta gratuita en [console.groq.com](https://console.groq.com/).
+  * `MONGODB_URI`: creando un clúster gratuito M0 en [MongoDB Atlas](https://www.mongodb.com/atlas) y activando el dataset de ejemplo *Sample Dataset* (`sample_airbnb`).
+  * `POSTGRES_URI`: creando un proyecto gratuito en [Neon.tech](https://neon.tech/) con una base de datos llamada `nasa_meteoritos`.
 
 ---
 
-## ▶️ Guía de Ejecución
+## Guía de ejecución
 
-### Escenario A: Arrancar la Interfaz Web Interactiva (`DataChat`)
+### Escenario A: arrancar la interfaz web interactiva 
 Es la forma más rápida de probar todas las funcionalidades del sistema desde el navegador:
 
 ```bash
@@ -186,11 +186,11 @@ Una vez abierta la pestaña en el navegador (`http://localhost:8501`):
 1. Selecciona el **Entorno de ejecución** (*API en la Nube* o *Local*).
 2. Elige la **Fuente de datos** (*MongoDB*, *PostgreSQL* o *Archivo propio `.CSV` / `.JSON`*).
 3. Selecciona el **Modelo LLM** que quieras poner a prueba.
-4. Escribe tu pregunta en español (o pulsa uno de los botones de ejemplo) y haz clic en **🚀 Ejecutar Consulta**.
+4. Escribe tu pregunta en español (o pulsa uno de los botones de ejemplo) y haz clic en **Ejecutar Consulta**.
 
 ---
 
-### Escenario B: Ejecutar los scripts de evaluación en la Nube (`api_cloud`)
+### Escenario B: ejecutar los scripts de evaluación en la nube (`api_cloud`)
 1. **Poblar PostgreSQL en Neon** (solo es necesario hacerlo la primera vez):
    ```bash
    python3 src/api_cloud/cargar_csv_cloud.py
@@ -207,7 +207,7 @@ Una vez abierta la pestaña en el navegador (`http://localhost:8501`):
 
 ---
 
-### Escenario C: Ejecutar el entorno 100 % Local (`local_llm`)
+### Escenario C: ejecutar el entorno 100 % local (`local_llm`)
 1. **Descargar los modelos en Ollama:**
    Asegúrate de tener Ollama ejecutándose en segundo plano (`ollama serve`) y descarga los modelos configurados:
    ```bash
@@ -228,8 +228,8 @@ Una vez abierta la pestaña en el navegador (`http://localhost:8501`):
 
 ---
 
-## 🔧 Solución de Problemas Frecuentes
+## Solución de problemas frecuentes
 
-* **`Error 429 (Rate Limit Exceeded)` en modo Nube:** La capa gratuita de Groq limita el número de tokens procesados por minuto. Si lanzas muchas consultas seguidas con modelos grandes (`gpt-oss-120b`), espera 30–60 segundos o cambia temporalmente al modelo `openai/gpt-oss-20b`.
-* **`Connection refused` en modo Local:** Verifica que el servicio de Ollama (`ollama serve`), PostgreSQL (`5432`) y MongoDB (`27017`) están arrancados en tu máquina y que las credenciales de `LOCAL_POSTGRES_URI` en tu `.env` coinciden con tu contraseña local.
-* **Bloqueo de puertos en redes universitarias/corporativas:** Algunas redes Wi-Fi bloquean los puertos salientes de bases de datos (`5432` para PostgreSQL o `27017` para MongoDB Atlas). Si ocurre un *timeout* al conectar con Neon o Atlas, prueba desde una red doméstica o compartiendo datos móviles.
+* **`Error 429 (Rate Limit Exceeded)` en modo Nube:** la capa gratuita de Groq limita el número de tokens procesados por minuto. Si lanzas muchas consultas seguidas con modelos grandes (`gpt-oss-120b`), espera 30–60 segundos o cambia temporalmente al modelo `openai/gpt-oss-20b`.
+* **`Connection refused` en modo Local:** verifica que el servicio de Ollama (`ollama serve`), PostgreSQL (`5432`) y MongoDB (`27017`) están arrancados en tu máquina y que las credenciales de `LOCAL_POSTGRES_URI` en tu `.env` coinciden con tu contraseña local.
+* **Bloqueo de puertos en redes universitarias/corporativas:** algunas redes Wi-Fi bloquean los puertos salientes de bases de datos (`5432` para PostgreSQL o `27017` para MongoDB Atlas). Si ocurre un *timeout* al conectar con Neon o Atlas, prueba desde una red doméstica o compartiendo datos móviles.

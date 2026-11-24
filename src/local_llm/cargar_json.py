@@ -1,8 +1,10 @@
+import os
 from pymongo import MongoClient
 from bson import json_util
 
 # 1. Conectar al servidor local de MongoDB
-cliente = MongoClient("mongodb://localhost:27017/")
+URI_MONGO = os.getenv("LOCAL_MONGO_URI")
+cliente = MongoClient(URI_MONGO)
 db = cliente["sampl_airbnb"]       # Crea la BD automáticamente al insertar datos
 coleccion = db["datos"]           # Nombre de tu colección
 

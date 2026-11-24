@@ -1,9 +1,10 @@
+import os
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.types import Float, Integer, Text
 
 # 1. Leer el CSV original
-df = pd.read_csv("Meteorite_Landings.csv")
+df = pd.read_csv("data/Meteorite_Landings.csv")
 
 # 2. Limpiar columnas para facilitar el trabajo al Agente SQL
 df = df.drop(columns=["GeoLocation"])
@@ -11,8 +12,8 @@ df = df.rename(columns={"mass (g)": "mass_g"})
 df["year"] = df["year"].astype("Int64")  # Entero que admite valores nulos (NULL)
 
 # 3. Conectar con tu base de datos en PostgreSQL
-# Cambia 'postgres', 'tu_contraseña' y 'nasa_meteoritos' por tus datos
-URI_BD = "postgresql+psycopg2://postgres:12345@localhost:5432/nasa_meteoritos"
+
+URI_BD = os.getenv("LOCAL_POSTGRES_URI")
 engine = create_engine(URI_BD)
 
 # 4. Fijar tipos SQL explícitos para que el esquema quede impecable
