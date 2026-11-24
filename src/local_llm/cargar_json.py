@@ -9,7 +9,7 @@ db = cliente["sampl_airbnb"]       # Crea la BD automáticamente al insertar dat
 coleccion = db["datos"]           # Nombre de tu colección
 
 # 2. Leer el archivo JSON (json_util soporta JSON normal y formatos propios de Mongo como $oid)
-with open("sample_airbnb.json", "r", encoding="utf-8") as archivo:
+with open("data/sample_airbnb.json", "r", encoding="utf-8") as archivo:
     contenido = archivo.read().strip()
 
 try:
