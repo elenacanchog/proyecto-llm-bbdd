@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -962,7 +962,7 @@ body.has-turned .hint{opacity:0;transform:translateX(-50%) translateY(6px);point
             <p class="kicker">Bases de datos · Lenguaje natural · LLM</p>
             <h1 class="cover-left-title"><br>Agente<em>SQL</em> - </h1>
             <p class="lead" style="max-width:92%;">Acceso a bases de datos desde LLMs</p>
-            <div class="cover-quote">“Elena Cancho González y Rodrigo Rina Mendo”</div>
+            <div class="cover-quote">Elena Cancho González y Rodrigo Rina Mendo</div>
           </div>
           <footer class="cover-footer">
             <div>
@@ -1021,11 +1021,11 @@ body.has-turned .hint{opacity:0;transform:translateX(-50%) translateY(6px);point
         <div class="page-inner">
           <header class="running"><span>03 · Stack</span><span>PBD / 2026</span></header>
           <div class="page-body" style="position:relative;min-height:0;">
-            <img src="assets/icono-langchain.png" alt="LangChain" style="position:absolute;top:2%;left:2%;width:33%;transform:rotate(-12deg);border:8px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,.18);border-radius:14px;">
-            <img src="assets/icono-ollama.png" alt="Ollama" style="position:absolute;top:0;left:38%;width:29%;transform:rotate(8deg);border:8px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,.18);border-radius:14px;">
-            <img src="assets/icono-groq.png" alt="Groq" style="position:absolute;top:8%;left:70%;width:26%;transform:rotate(-7deg);border:8px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,.18);border-radius:14px;">
-            <img src="assets/icono-postgreSQL.png" alt="PostgreSQL" style="position:absolute;top:42%;left:8%;width:30%;transform:rotate(10deg);border:8px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,.18);border-radius:14px;">
-            <img src="assets/icono-mongoDB.png" alt="MongoDB" style="position:absolute;top:50%;left:46%;width:40%;transform:rotate(-6deg);border:8px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,.18);border-radius:14px;">
+            <img src="assets/sticker-icono-langchain.png" alt="LangChain" style="position:absolute;top:2%;left:2%;width:33%;transform:rotate(-12deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.20));">
+            <img src="assets/sticker-icono-ollama.png" alt="Ollama" style="position:absolute;top:0;left:38%;width:29%;transform:rotate(8deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.20));">
+            <img src="assets/sticker-icono-groq.png" alt="Groq" style="position:absolute;top:8%;left:70%;width:26%;transform:rotate(-7deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.20));">
+            <img src="assets/sticker-icono-postgreSQL.png" alt="PostgreSQL" style="position:absolute;top:42%;left:8%;width:30%;transform:rotate(10deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.20));">
+            <img src="assets/sticker-icono-mongoDB.png" alt="MongoDB" style="position:absolute;top:50%;left:46%;width:40%;transform:rotate(-6deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.20));">
           </div>
           <footer class="folio"><span class="fnum">03</span><span>Revista de proyectos</span></footer>
         </div>
@@ -1103,8 +1103,8 @@ chain = prompt | llm</pre>
             </div>
             <div class="plate filler">
               <div class="plate-label"><span>terminal · bucle del agente</span><span>tools</span></div>
-              <pre class="terminal"><span class="dim">[Tool]</span> obtener_esquema → campos reales
-<span class="dim">[Tool]</span> ejecutar_sql    → 3 filas
+              <pre class="terminal"><span class="dim">[Tool]</span> obtener_esquema -> campos reales
+<span class="dim">[Tool]</span> ejecutar_sql    -> 3 filas
 <span class="ok">[Respuesta]</span> 3 meteoritos + explicación</pre>
             </div>
           </div>
@@ -1259,7 +1259,7 @@ df["year"] = df["year"].astype("Int64")</pre>
           <header class="running"><span>13 · Ollama</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <div class="row"><span class="icon-box"><svg class="icon"><use href="#i-ollama"></use></svg></span><p class="kicker" style="margin:0;">05 · Local</p></div>
-            <h1 class="h1">La IA que vive<br>en tu portátil.</h1>
+            <h1 class="h1">La IA<br>en local</h1>
             <p class="lead">Ollama descarga y ejecuta modelos en tu máquina. Expone una API compatible con OpenAI y se integra con LangChain mediante ChatOllama.</p>
             <p class="body">Es la opción privada: el prompt, los datos y la respuesta no salen de casa. También es la barata: no hay tokens que pagar. El precio se paga en hardware, velocidad y calidad.</p>
             <div class="pill-row"><span class="pill">qwen3.5:4b</span><span class="pill">gemma-4</span><span class="pill">num_ctx = 8192</span><span class="pill">keep_alive = 15m</span><span class="pill">temperature = 0</span></div>
@@ -1308,7 +1308,7 @@ agent = create_agent(model=llm, tools=tools,
           <header class="running"><span>15 · Groq</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <div class="row"><span class="icon-box" style="color:var(--accent);"><svg class="icon"><use href="#i-groq"></use></svg></span><p class="kicker" style="margin:0;">06 · Cloud</p></div>
-            <h1 class="h1">Velocidad de vértigo,<br>fuera de casa.</h1>
+            <h1 class="h1">Una API <br>en la nube.</h1>
             <p class="lead">Groq ejecuta modelos abiertos en su hardware con una API compatible con OpenAI. Ideal para comparar modelos sin montar infraestructura.</p>
             <p class="body">La nube baja la latencia y sube la calidad, pero los datos salen de la máquina. Es la ruta que alimenta la demo de Streamlit.</p>
             <div class="pill-row"><span class="pill">openai/gpt-oss-120b</span><span class="pill">qwen/qwen3.8-27b</span><span class="pill">openai/gpt-oss-20b</span></div>
@@ -1383,10 +1383,8 @@ respuesta = (prompt | llm).invoke(...)</pre>
           <div class="page-body">
             <p class="kicker">La pantalla</p>
             <h2 class="h2">Así se ve.</h2>
-            <div class="placeholder tall" style="flex:1;">
-              <svg class="ph-icon" aria-hidden="true"><use href="#i-camera"></use></svg>
-              <div class="ph-title">Aquí van imágenes de la demo</div>
-              <div class="ph-note">Capturas de Streamlit, del agente local y de la tabla comparativa. Se incorporarán en la siguiente iteración.</div>
+            <div class="plate" style="flex:1;min-height:0;">
+              <img src="assets/streamlit-foto-demo.png" alt="Captura de la demo de Streamlit" style="width:100%;height:100%;object-fit:contain;display:block;">
             </div>
             <div class="plate">
               <div class="plate-label"><span>terminal · arranque</span><span>streamlit</span></div>
