@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 560" width="1260" height="560" role="img" aria-labelledby="tituloFlujo">
+  <title id="tituloFlujo">Roadmap del agente: carretera con seis hitos que van de la pregunta del usuario a la respuesta final</title>
+
+  <defs>
+    <clipPath id="marco">
+      <rect x="0" y="0" width="1260" height="560" rx="18"/>
+    </clipPath>
+    <filter id="sombraHito" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.25"/>
+    </filter>
+    <style>
+      .hito    { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #ffffff; }
+      .titulo  { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 16.5px; font-weight: 700; fill: #111827; }
+      .desc    { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 11.5px; fill: #4b5563; }
+      .nota    { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #b45309; }
+    </style>
+  </defs>
+
+  <!-- Lienzo -->
+  <rect x="0" y="0" width="1260" height="560" rx="18" fill="#ffffff"/>
+
+  <!-- ================= CARRETERA ================= -->
+  <g clip-path="url(#marco)">
+    <path d="M -30 205 C 58 205, 42 365, 130 365 C 218 365, 232 205, 320 205 C 408 205, 422 365, 510 365 C 598 365, 612 205, 700 205 C 788 205, 802 365, 890 365 C 978 365, 992 205, 1080 205 C 1168 205, 1182 365, 1270 365"
+          fill="none" stroke="#111827" stroke-width="32" stroke-linecap="round"/>
+    <path d="M -30 205 C 58 205, 42 365, 130 365 C 218 365, 232 205, 320 205 C 408 205, 422 365, 510 365 C 598 365, 612 205, 700 205 C 788 205, 802 365, 890 365 C 978 365, 992 205, 1080 205 C 1168 205, 1182 365, 1270 365"
+          fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="12 12" stroke-linecap="butt"/>
+  </g>
+
+  <!-- ================= HITOS ================= -->
+  <g filter="url(#sombraHito)">
+    <circle cx="130" cy="365" r="24" fill="#ec4899" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="320" cy="205" r="24" fill="#14b8a6" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="510" cy="365" r="24" fill="#8b5cf6" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="700" cy="205" r="24" fill="#f97316" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="890" cy="365" r="24" fill="#3b82f6" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="1080" cy="205" r="24" fill="#10b981" stroke="#ffffff" stroke-width="5"/>
+  </g>
+  <g class="hito" text-anchor="middle">
+    <text x="130" y="371">1</text>
+    <text x="320" y="211">2</text>
+    <text x="510" y="371">3</text>
+    <text x="700" y="211">4</text>
+    <text x="890" y="371">5</text>
+    <text x="1080" y="211">6</text>
+  </g>
+
+  <!-- ================= 1. Pregunta ================= -->
+  <text class="titulo" x="130" y="419" text-anchor="middle">Pregunta</text>
+  <text class="desc" x="130" y="440" text-anchor="middle">el usuario pregunta</text>
+  <text class="desc" x="130" y="455" text-anchor="middle">en lenguaje natural</text>
+
+  <!-- ================= 2. Razonamiento ================= -->
+  <text class="titulo" x="320" y="122" text-anchor="middle">Razonamiento</text>
+  <text class="desc" x="320" y="146" text-anchor="middle">el agente decide qué</text>
+  <text class="desc" x="320" y="161" text-anchor="middle">herramienta usar</text>
+
+  <!-- ================= 3. Esquema ================= -->
+  <text class="titulo" x="510" y="419" text-anchor="middle">Esquema</text>
+  <text class="desc" x="510" y="440" text-anchor="middle">get_schema: tablas,</text>
+  <text class="desc" x="510" y="455" text-anchor="middle">campos y ejemplos</text>
+
+  <!-- ================= 4. Consulta ================= -->
+  <text class="titulo" x="700" y="122" text-anchor="middle">Consulta</text>
+  <text class="desc" x="700" y="146" text-anchor="middle">SQL o pipeline de</text>
+  <text class="desc" x="700" y="161" text-anchor="middle">agregación MongoDB</text>
+
+  <!-- ================= 5. Ejecución ================= -->
+  <text class="titulo" x="890" y="419" text-anchor="middle">Ejecución</text>
+  <text class="desc" x="890" y="440" text-anchor="middle">run_sql / run_mongo</text>
+  <text class="desc" x="890" y="455" text-anchor="middle">en el motor real</text>
+
+  <!-- ================= 6. Respuesta ================= -->
+  <text class="titulo" x="1080" y="122" text-anchor="middle">Respuesta</text>
+  <text class="desc" x="1080" y="146" text-anchor="middle">datos interpretados</text>
+  <text class="desc" x="1080" y="161" text-anchor="middle">y formateados</text>
+
+  <!-- Nota de autocorrección -->
+  <rect x="455" y="492" width="350" height="34" rx="17" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text class="nota" x="630" y="514" text-anchor="middle">¿Error o 0 filas? → autocorrección y reintento</text>
+
+  <!-- Marco -->
+  <rect x="0" y="0" width="1260" height="560" rx="18" fill="none" stroke="#e2e8f0" stroke-width="1.5"/>
+</svg>

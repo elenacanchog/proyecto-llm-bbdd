@@ -3,7 +3,7 @@
 > **Asignatura:** Programación de Bases de Datos (PBD)  
 > **Repositorio:** [github.com/elenacanchog/proyecto-llm-bbdd](https://github.com/elenacanchog/proyecto-llm-bbdd)
 
-**DataChat** es un sistema inteligente que permite interrogar bases de datos **Relacionales (SQL)**, **No Relacionales (NoSQL)** y **archivos locales (`.csv` / `.json`)** utilizando **lenguaje natural en español**.
+**AgenteSQL** es un sistema inteligente que permite interrogar bases de datos **Relacionales (SQL)**, **No Relacionales (NoSQL)** y **archivos locales (`.csv` / `.json`)** utilizando **lenguaje natural en español**.
 
 El proyecto aborda uno de los retos principales de la integración entre Modelos de Lenguaje (LLMs) y sistemas de almacenamiento: **¿cómo lograr que un modelo genere consultas exactas sin conocer previamente la estructura de los datos y sin inventarse nombres de tablas o campos?** Para resolverlo, se ha diseñado una arquitectura basada en **Agentes Autónomos con herramientas (*Tool Calling*)** y se ha realizado una comparativa experimental entre **inferencia en la nube (APIs externas)** e **inferencia 100 % local**.
 
@@ -14,6 +14,8 @@ El proyecto aborda uno de los retos principales de la integración entre Modelos
 A diferencia de los enfoques tradicionales de *Text-to-SQL* (donde se le pasa un esquema estático al modelo en un único *prompt*), este proyecto implementa **Agentes ReAct (Razonamiento + Acción)** mediante **LangChain**.
 
 Cuando el usuario formula una pregunta en español, el agente sigue un ciclo autónomo de decisión:
+
+![Roadmap del agente: la ruta va de la pregunta del usuario a la respuesta final, pasando por la inspección del esquema, la generación de la consulta y su ejecución](assets/flujo-agente.svg)
 
 ```text
 Pregunta en español
