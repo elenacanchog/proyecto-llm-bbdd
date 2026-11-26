@@ -110,7 +110,7 @@
 ### 4.2 Modelos evaluados (5:55 – 6:20)
 
 **Qué se dice:**
-> "Evaluamos tres modelos de Groq: `openai/gpt-oss-120b`, `qwen/qwen3.8-27b` y `openai/gpt-oss-20b`. Las bases también están en la nube: PostgreSQL en Neon y MongoDB Atlas con el dataset de ejemplo `sample_airbnb`."
+> "Evaluamos cuatro modelos de Groq: `openai/gpt-oss-120b`, `qwen/qwen3.8-27b`, `openai/gpt-oss-20b` y `allam-2-7b`. Las bases también están en la nube: PostgreSQL en Neon y MongoDB Atlas con el dataset de ejemplo `sample_airbnb`."
 
 ### 4.3 Ventajas y contrapartidas (6:20 – 6:45)
 
@@ -158,42 +158,43 @@
 
 ---
 
-## 6. Conclusiones y tablas comparativas (9:00 – 10:00)
+## 6. Conclusiones y comparativas (9:00 – 10:00)
 
-> **Nota:** esta sección se completa una vez cerrada la batería de pruebas. Aquí se deja el esqueleto y los puntos a cubrir.
+### 6.1 Lo que aprendimos (9:00 – 9:25)
 
-### 6.1 Puntos a tratar (9:00 – 9:20)
+**Qué se ve:** página 21, «Lo que aprendimos».
 
-- **Local vs nube:** privacidad y coste frente a velocidad y calidad.
-- **SQL vs NoSQL:** el esquema relacional es más predecible para el modelo; el documental exige compactar y proyectar.
-- **Modelos:** los más grandes son más fiables generando consultas válidas; los pequeños son más rápidos pero fallan más.
-- **Reintentos:** la autocorrección reduce los fallos, pero consume tokens y tiempo.
-- **Aprendizaje clave:** el límite no es el modelo, es el contexto. Menos datos en el prompt, más consultas correctas.
+**Qué se dice:**
+> "Cerramos con cuatro ideas. Primera: la nube va unas treinta veces más rápida —dos a cuatro segundos por consulta frente a cuarenta y siete a ciento setenta y cinco en local—. A cambio, en local los datos no salen del equipo y no se paga por token. Segunda: SQL es más predecible, porque el esquema explícito guía al modelo; en Mongo la agregación dispara tiempo y tokens, hasta ciento once segundos y veinte mil tokens. Tercera: el tamaño pesa —allam-2-7b falla las tres consultas en las dos bases, mientras los modelos grandes aciertan todas—. Y cuarta, la más incómoda: en local, qwen3.5:4b resolvió las siete consultas de SQL, pero no completó ninguna sobre MongoDB."
 
-### 6.2 Tabla comparativa de modelos (9:20 – 9:45)
+### 6.2 Tabla de modelos (9:25 – 9:40)
 
-| Modelo | Entorno | Latencia consulta (s) | Latencia total (s) | Tokens | Éxito |
-|---|---|---|---|---|---|
-| `openai/gpt-oss-120b` | Groq (nube) | — | — | — | — |
-| `qwen/qwen3.8-27b` | Groq (nube) | — | — | — | — |
-| `openai/gpt-oss-20b` | Groq (nube) | — | — | — | — |
-| `qwen3.5:4b` | Ollama (local) | — | — | — | — |
-| `gemma-4` | Ollama (local) | — | — | — | — |
+**Qué se ve:** página 20. Media por consulta SELECT sobre PostgreSQL.
 
-> Rellenar tras ejecutar `sql_api.py` y `mongo_api.py` (nube) y los scripts locales.
+| Modelo | Entorno | Tiempo medio | Tokens medios | Éxito |
+|---|---|---|---|---|
+| `openai/gpt-oss-120b` | Groq (nube) | 3,1 s | 1.612 | 3/3 |
+| `qwen/qwen3.8-27b` | Groq (nube) | 3,3 s | 2.602 | 3/3 |
+| `openai/gpt-oss-20b` | Groq (nube) | 2,1 s | 1.791 | 3/3 |
+| `allam-2-7b` | Groq (nube) | error | — | 0/3 |
+| `qwen3.5:4b` | Ollama (local) | 97,1 s | 2.522 | 7/7 |
+| `gemma-4` | Ollama (local) | 82,1 s | 1.605 | 7/7 |
 
-### 6.3 Tabla comparativa de entornos (9:45 – 9:55)
+> Nube: 3 consultas. Local: 7 consultas. Todas son de lectura (SELECT).
 
-| Característica | Modo nube (`api_cloud`) | Modo local (`local_llm`) |
-|---|---|---|
-| Motor de inferencia | Groq (LPU) | Ollama (CPU/GPU propia) |
-| Base SQL | PostgreSQL en Neon | PostgreSQL local (`localhost:5432`) |
-| Base NoSQL | MongoDB Atlas | MongoDB Community local (`localhost:27017`) |
-| Privacidad | Los datos salen de la máquina | 100 % privado, sin internet |
-| Coste | Por token (cuota gratuita) | Hardware propio |
-| Evaluación | Batería automatizada + gráficos PNG | Streaming en tiempo real en consola |
+**Qué se dice:**
+> "En la nube, los modelos que responden lo hacen en dos o tres segundos, con entre mil seiscientos y dos mil seiscientos tokens. allam-2-7b no completa ninguna. En local, gemma-4 promedia ochenta y dos segundos y mil seiscientos tokens; qwen3.5:4b, noventa y siete segundos. Es treinta veces más tiempo para consultas equivalentes."
 
-### 6.4 Cierre (9:55 – 10:00)
+### 6.3 Las gráficas: mismo SQL, dos motores (9:40 – 9:52)
+
+**Qué se ve:** página 22. Arriba `graficos/comparativa_tiempo_sql_api.png`; abajo `graficos/comparativa_tiempo_sql_local.png`.
+
+**Qué se dice:**
+> "Estas dos gráficas comparan consultas SQL equivalentes en los dos entornos. Arriba, la nube: barras de dos a cuatro segundos por pregunta, y allam-2-7b en error. Abajo, local: las mismas pruebas entre cuarenta y siete y ciento setenta y cinco segundos. La diferencia no es de décimas, es de decenas de veces."
+
+> "Y un detalle que nos sorprendió: en MongoDB local, qwen3.5:4b no llegó a responder ninguna de las tres preguntas; gemma-4 las resolvió entre ciento seis y doscientos ochenta y ocho segundos."
+
+### 6.4 Cierre (9:52 – 10:00)
 
 **Qué se dice:**
 > "En resumen: no hace falta que el modelo sepa la base de datos. Hace falta que sepa preguntarle. LangChain nos da la orquestación, Ollama y Groq nos dan el razonamiento, y las bases de datos hacen lo que mejor saben: ejecutar consultas exactas. Muchas gracias."
@@ -209,6 +210,7 @@
 - [ ] `streamlit run demo_web.py` abierto en el navegador.
 - [ ] Variables de `.env` rellenadas (Groq + Neon + Atlas) si se demostrará la nube.
 - [ ] Una terminal con `python src/local_llm/sql_local.py` lista por si se quiere mostrar el streaming.
-- [ ] Batería de pruebas ejecutada y tablas de la sección 6 rellenadas.
+- [ ] Batería ejecutada (`python src/api_cloud/sql_api.py`, `python src/local_llm/sql_local_metricas.py`) y gráficas al día en `graficos/`.
+- [ ] No prometer MongoDB local con `qwen3.5:4b`: no completa ninguna consulta.
 - [ ] Proyector / pantalla compartida configurada.
 - [ ] Tiempo ensayado: objetivo 10 min, margen 30 s.
