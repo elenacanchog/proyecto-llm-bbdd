@@ -14,7 +14,7 @@ load_dotenv()
 # 1. CONFIGURACIÓN INICIAL
 URI_MONGO = os.getenv("LOCAL_MONGO_URI")
 NOMBRE_BD = os.getenv("LOCAL_MONGO_DB")
-MODELOS_A_PROBAR = ["qwen3.5:4b", "gemma-4:latest"]
+MODELOS_A_PROBAR = [ "gemma-4:latest"] #"qwen3.5:4b",
 
 cliente = MongoClient(URI_MONGO)
 mongo_db = cliente[NOMBRE_BD]

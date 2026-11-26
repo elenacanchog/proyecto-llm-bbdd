@@ -17,26 +17,6 @@ Cuando el usuario formula una pregunta en español, el agente sigue un ciclo aut
 
 ![Roadmap del agente: la ruta va de la pregunta del usuario a la respuesta final, pasando por la inspección del esquema, la generación de la consulta y su ejecución](assets/flujo-agente.svg)
 
-```text
-Pregunta en español
-       │
-       ▼
-┌──────────────────────────────────────────────────────────┐
-│ 1. INSPECCIÓN DEL ESQUEMA (Tool: get_schema)             │
-│    El agente consulta qué tablas o colecciones existen,  │
-│    sus tipos de datos y ejemplos reales de valores.      │
-└──────────────────────────┬───────────────────────────────┘
-                           ▼
-┌──────────────────────────────────────────────────────────┐
-│ 2. GENERACIÓN Y EJECUCIÓN (Tool: run_sql / run_mongo)    │
-│    El agente redacta la consulta SQL o el Pipeline de    │
-│    agregación MongoDB y lo ejecuta contra el motor real. │
-└──────────────────────────┬───────────────────────────────┘
-                           │
-             ¿Error de sintaxis o 0 filas?
-                ├── SÍ ──► 3. AUTOCORRECCIÓN (Reintenta ajustando campos/tipos)
-                └── NO ──► 4. SÍNTESIS Y RESPUESTA FINAL EN ESPAÑOL
-```
 
 ### Optimizaciones técnicas implementadas
 * **Compactación inteligente de esquemas NoSQL (`resumir_valor`):** los documentos de MongoDB suelen tener estructuras profundamente anidadas y listas largas. Antes de entregar un documento de ejemplo al LLM, una función recursiva acorta cadenas largas y limita las muestras de arrays a 12 elementos, garantizando que el modelo vea todos los campos reales sin desbordar su ventana de contexto.

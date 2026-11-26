@@ -84,7 +84,7 @@
 ### 3.1 Qué es Ollama (4:00 – 4:30)
 
 **Qué se dice:**
-> "Ollama es una herramienta que descarga, instala y ejecuta modelos de lenguaje en tu propia máquina. Expone una API local compatible con OpenAI, así que LangChain se conecta a ella con `ChatOllama` como si fuera un servicio remoto. En nuestro proyecto usamos `qwen3.5:4b` y `gemma-4`."
+> "Ollama es una herramienta que descarga, instala y ejecuta LLMs en tu propia máquina. Expone una API local compatible con OpenAI, así que LangChain se conecta a ella con `ChatOllama` como si fuera un servicio remoto. En nuestro proyecto usamos `qwen3.5:4b` y `gemma-4`."
 
 ### 3.2 Por qué nos interesa (4:30 – 5:00)
 

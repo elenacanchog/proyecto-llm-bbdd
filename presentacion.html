@@ -1408,7 +1408,7 @@ respuesta = (prompt | llm).invoke(...)</pre>
               <div class="stat"><div class="v">tok</div><div class="l">tokens por pregunta</div></div>
               <div class="stat"><div class="v">✓</div><div class="l">éxito sintáctico</div></div>
             </div>
-            <p class="body">Tres preguntas: alojamientos en Barcelona, los meteoritos más pesados y una agregación con filtro, orden y proyección.</p>
+            <p class="body">Preguntas de dificultad creciente: alojamientos en Barcelona, los meteoritos más pesados y agregaciones con filtro, orden y proyección.</p>
             <div class="pullquote">No todo modelo que escribe JSON escribe el JSON correcto.</div>
           </div>
           <footer class="folio"><span class="fnum">19</span><span>Revista de proyectos</span></footer>
@@ -1422,20 +1422,24 @@ respuesta = (prompt | llm).invoke(...)</pre>
             <p class="kicker">La tabla</p>
             <h2 class="h2">Comparativa de modelos.</h2>
             <table class="data-table">
-              <thead><tr><th>Modelo</th><th>Tiempo</th><th>Tokens</th><th>Éxito</th></tr></thead>
+              <thead><tr><th>Modelo</th><th>Tiempo medio</th><th>Tokens medios</th><th>Éxito</th></tr></thead>
               <tbody>
-                <tr><td class="em">openai/gpt-oss-120b</td><td>—</td><td>—</td><td>—</td></tr>
-                <tr><td class="em">qwen/qwen3.8-27b</td><td>—</td><td>—</td><td>—</td></tr>
-                <tr><td class="em">openai/gpt-oss-20b</td><td>—</td><td>—</td><td>—</td></tr>
-                <tr><td class="em">qwen3.5:4b</td><td>—</td><td>—</td><td>—</td></tr>
-                <tr><td class="em">gemma-4</td><td>—</td><td>—</td><td>—</td></tr>
+                <tr><td colspan="4" class="tiny upper" style="color:var(--accent);padding-top:2px;">Nube · Groq API · 3 consultas</td></tr>
+                <tr><td class="em">openai/gpt-oss-120b</td><td>3,1 s</td><td>1.612</td><td>3/3</td></tr>
+                <tr><td class="em">qwen/qwen3.8-27b</td><td>3,3 s</td><td>2.602</td><td>3/3</td></tr>
+                <tr><td class="em">openai/gpt-oss-20b</td><td>2,1 s</td><td>1.791</td><td>3/3</td></tr>
+                <tr><td class="em">allam-2-7b</td><td>error</td><td>—</td><td>0/3</td></tr>
+                <tr><td colspan="4" class="tiny upper" style="color:var(--accent);padding-top:10px;">Local · Ollama · 7 consultas</td></tr>
+                <tr><td class="em">qwen3.5:4b</td><td>97,1 s</td><td>2.522</td><td>7/7</td></tr>
+                <tr><td class="em">gemma-4</td><td>82,1 s</td><td>1.605</td><td>7/7</td></tr>
               </tbody>
             </table>
             <div class="plate">
               <div class="plate-label"><span>terminal · batería</span><span>python</span></div>
-              <pre class="code"><span class="p">$</span> python src/api_cloud/mongo_api.py</pre>
+              <pre class="code"><span class="p">$</span> python src/api_cloud/sql_api.py
+<span class="p">$</span> python src/local_llm/sql_local_metricas.py</pre>
             </div>
-            <div class="note">Pendiente de completar con la batería de pruebas. Hasta entonces, las celdas quedan vacías a propósito.</div>
+            <div class="note">Media por consulta SELECT sobre PostgreSQL. Todas las preguntas de la batería son de lectura.</div>
           </div>
           <footer class="folio"><span class="fnum">20</span><span>Revista de proyectos</span></footer>
         </div>
@@ -1446,9 +1450,13 @@ respuesta = (prompt | llm).invoke(...)</pre>
           <header class="running"><span>21 · Conclusiones</span><span>PBD / 2026</span></header>
           <div class="page-body">
             <p class="kicker">08 · Conclusiones</p>
-            <h1 class="h1">Conclusiones.</h1>
-            <p class="lead">Local vs cloud, lo que aprendimos y lo que queda por hacer.</p>
-            <div class="note">Esta sección se completará cuando estén cerrados los resultados de la batería de pruebas.</div>
+            <h1 class="h1">Lo que<br>aprendimos.</h1>
+            <p class="lead">Nube frente a local, SQL frente a Mongo y un modelo pequeño que se queda por el camino.</p>
+            <p class="body"><strong>La nube va unas 30 veces más rápida.</strong> 2–4 s por consulta frente a 47–175 s en local. Privacidad y coste cero son la contrapartida.</p>
+            <p class="body"><strong>SQL es más predecible.</strong> El esquema explícito guía al modelo; en Mongo la agregación dispara tiempo y tokens: hasta 111,8 s y 20.392 tokens.</p>
+            <p class="body"><strong>El tamaño pesa, pero no lo decide todo.</strong> <span class="mono">allam-2-7b</span> falla las tres consultas en ambas bases; los grandes aciertan todas.</p>
+            <p class="body"><strong>En local, Qwen no lee Mongo.</strong> <span class="mono">qwen3.5:4b</span> resolvió 7/7 en SQL, pero 0/3 en MongoDB: no llegó a responder.</p>
+            <div class="pullquote">El límite no es el modelo: es el contexto.</div>
           </div>
           <footer class="folio"><span class="fnum">21</span><span>Revista de proyectos</span></footer>
         </div>
@@ -1458,13 +1466,17 @@ respuesta = (prompt | llm).invoke(...)</pre>
         <div class="page-inner">
           <header class="running"><span>22 · Conclusiones</span><span>PBD / 2026</span></header>
           <div class="page-body">
-            <p class="kicker">La tabla</p>
-            <h2 class="h2">Comparativa final.</h2>
-            <div class="placeholder tall" style="flex:1;">
-              <svg class="ph-icon" aria-hidden="true"><use href="#i-database"></use></svg>
-              <div class="ph-title">Aquí va tabla de conclusiones</div>
-              <div class="ph-note">Se completará tras la batería de pruebas.</div>
+            <p class="kicker">Los tiempos</p>
+            <h2 class="h2">Mismo SQL, dos motores.</h2>
+            <div class="plate" style="flex:1;min-height:0;display:flex;flex-direction:column;">
+              <div class="plate-label"><span>Nube · PostgreSQL + API</span><span>tiempo por consulta</span></div>
+              <img src="graficos/comparativa_tiempo_sql_api.png" alt="Tiempo por consulta en PostgreSQL en la nube con los modelos de Groq" style="flex:1;min-height:0;width:100%;object-fit:contain;display:block;">
             </div>
+            <div class="plate" style="flex:1;min-height:0;display:flex;flex-direction:column;">
+              <div class="plate-label"><span>Local · PostgreSQL + Ollama</span><span>tiempo por consulta</span></div>
+              <img src="graficos/comparativa_tiempo_sql_local.png" alt="Tiempo por consulta en PostgreSQL local con qwen3.5 y gemma-4" style="flex:1;min-height:0;width:100%;object-fit:contain;display:block;">
+            </div>
+            <div class="note">En local, <span class="mono">qwen3.5:4b</span> no completó ninguna consulta sobre MongoDB; <span class="mono">gemma-4</span> resolvió las tres en 106–288 s.</div>
           </div>
           <footer class="folio"><span class="fnum">22</span><span>Revista de proyectos</span></footer>
         </div>
